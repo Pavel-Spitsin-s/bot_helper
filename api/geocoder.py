@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
 import os
-import requests
+import aiohttp
 
 GEOCODER_API_URL = 'https://geocode-maps.yandex.ru/1.x'
 
 
-def get_toponym(query):
+async def get_toponym(query):
     apikey = os.getenv('GEOCODER_APIKEY')
 
     try:
-        response = requests.get(GEOCODER_API_URL, params={
-            'geocode': query,
-            'apikey': apikey,
-            'lang': 'ru_RU',
-            'format': 'json'
-        }).json()
-        return response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
+        async with aiohttp.ClientSession() as session:
+            async with session.get(GEOCODER_API_URL, params={
+                'geocode': query,
+                'apikey': apikey,
+                'lang': 'ru_RU',
+                'format': 'json'
+            }) as response:
+                response = await response.json()
+                return response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
     except Exception as e:
         return
 
