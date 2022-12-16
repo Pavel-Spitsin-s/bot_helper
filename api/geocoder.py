@@ -6,7 +6,7 @@ GEOCODER_API_URL = 'https://geocode-maps.yandex.ru/1.x'
 
 
 def get_toponym(query):
-    apikey = os.getenv('geocoder_apikey')
+    apikey = os.getenv('GEOCODER_APIKEY')
 
     try:
         response = requests.get(GEOCODER_API_URL, params={

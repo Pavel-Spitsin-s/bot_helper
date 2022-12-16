@@ -10,4 +10,5 @@ def get_toponym_map_url(toponym):
     return STATIC_MAPS_URL + \
         f'?l=map' \
         f'&lang=ru_RU' \
+        f'&size=400,300' \
         f'&bbox={rect[0]},{rect[1]}~{rect[2]},{rect[3]}'
