@@ -22,5 +22,13 @@ def get_toponym(query):
 
 def get_toponym_coords(toponym):  # (долгота, широта)
     if toponym is None:
-        return 0, 0
+        return
     return tuple(map(float, toponym['Point']['pos'].split()))
+
+
+def get_toponym_rect(toponym):
+    if toponym is None:
+        return
+    x1, y1 = map(float, toponym['boundedBy']['Envelope']['lowerCorner'].split())
+    x2, y2 = map(float, toponym['boundedBy']['Envelope']['upperCorner'].split())
+    return x1, y1, x2, y2
