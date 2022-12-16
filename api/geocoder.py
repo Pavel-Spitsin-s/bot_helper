@@ -32,3 +32,7 @@ def get_toponym_rect(toponym):
     x1, y1 = map(float, toponym['boundedBy']['Envelope']['lowerCorner'].split())
     x2, y2 = map(float, toponym['boundedBy']['Envelope']['upperCorner'].split())
     return x1, y1, x2, y2
+
+
+def get_toponym_name(toponym):
+    return toponym['name']
