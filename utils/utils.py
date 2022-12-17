@@ -43,5 +43,5 @@ def get_date_diff_from_message(message):
         dt = (date - today).days
         if dt < 0 or dt > 6:
             return -1
-        return dt
-    return 0
+        return dt + 1
+    return 1
