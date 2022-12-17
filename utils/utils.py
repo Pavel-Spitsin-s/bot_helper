@@ -27,7 +27,6 @@ def text2doc(text):
 
 
 def get_loc_from_doc(doc):
-    doc.ner.print()
     locs = []
     for span in doc.spans:
         if span.type == 'LOC':
