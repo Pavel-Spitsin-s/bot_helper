@@ -19,23 +19,22 @@ WEATHER_API_URL = "https://api.weather.yandex.ru/v2/forecast?"
 def get_today_weather(dan):
     s = ''
     b = {}
-    b['температура'] = dan['fact']['temp']
-    s = dan['fact']['condition']
+    b['температура'] = dan['temp']
+    s = dan['condition']
     b['осадки'] = conditions[s]
-    b['скорость ветра'] = dan['fact']['wind_speed']
-    s = dan['fact']['wind_dir']
+    b['скорость ветра'] = dan['wind_speed']
+    s = dan['wind_dir']
     b['направление ветра'] = wind_dirs[s]
-    b['влажность'] = dan['fact']['humidity']
-    s = dan['fact']['prec_type']
+    b['влажность'] = dan['humidity']
+    s = dan['prec_type']
     b['тип осадков'] = type_prec[str(s)]
-    s = dan['facts']['cloudness']
+    s = dan['cloudness']
     b['ясность'] = str(clowness[str(s)])
-    b['давление'] = dan['fact']['pressure_mm']
+    b['давление'] = dan['pressure_mm']
     return b
 
 
 def obr_forecasts(dan):
-    s = ''
     A = []
     for i in range(len(dan)):
         b = {}
@@ -58,9 +57,17 @@ def obr_forecasts(dan):
 
 async def get_weather(latitude, longitude, dayf):
     token = os.getenv('WEATHER_APIKEY')
-    async with aiohttp.ClientSession() as session:
-        async with session.get(WEATHER_API_URL,
-                               params={'lat': latitude, 'lon': longitude, 'lang': 'ru_RU', 'limit': dayf},
-                               headers={'X-Yandex-API-Key': token}) as response:
-            response = await response.json()
-            return obr_forecasts(response['forecasts'])
+    if dayf == 1:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(WEATHER_API_URL,
+                                   params={'lat': latitude, 'lon': longitude, 'lang': 'ru_RU'},
+                                   headers={'X-Yandex-API-Key': token}) as response:
+                response = await response.json()
+                return obr_forecasts(response['fact'])
+    else:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(WEATHER_API_URL,
+                                   params={'lat': latitude, 'lon': longitude, 'lang': 'ru_RU', 'limit': dayf},
+                                   headers={'X-Yandex-API-Key': token}) as response:
+                response = await response.json()
+                return obr_forecasts(response['forecasts'])
