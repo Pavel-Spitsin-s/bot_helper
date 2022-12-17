@@ -63,7 +63,7 @@ async def get_weather(latitude, longitude, dayf):
                                    params={'lat': latitude, 'lon': longitude, 'lang': 'ru_RU'},
                                    headers={'X-Yandex-API-Key': token}) as response:
                 response = await response.json()
-                return obr_forecasts(response['fact'])
+                return get_today_weather(response['fact'])
     else:
         async with aiohttp.ClientSession() as session:
             async with session.get(WEATHER_API_URL,
