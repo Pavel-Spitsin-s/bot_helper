@@ -6,6 +6,7 @@ from .db_session import SqlAlchemyBase
 class User(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'user'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True, unique=True)
+    tg_id = sqlalchemy.Column(sqlalchemy.Integer, unique=True)
     lat = sqlalchemy.Column(sqlalchemy.String)
-    long = sqlalchemy.CHAR(sqlalchemy.String)
-    name = sqlalchemy.CHAR(sqlalchemy.String)
+    long = sqlalchemy.Column(sqlalchemy.String)
+    name = sqlalchemy.Column(sqlalchemy.String)
