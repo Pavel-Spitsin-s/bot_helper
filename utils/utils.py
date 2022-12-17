@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
-
 from natasha import NewsEmbedding, Segmenter, NewsNERTagger, Doc, MorphVocab, NewsMorphTagger
 from natasha.syntax import NewsSyntaxParser
 
