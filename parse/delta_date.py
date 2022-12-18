@@ -2,13 +2,10 @@ import datetime
 from ru_word2number import w2n
 import pymorphy2
 
-morph = pymorphy2.MorphAnalyzer()
-cur_date = datetime.datetime.now()
 
+def get(message_text, cur_date):
+	morph = pymorphy2.MorphAnalyzer()
 
-def get(message_text):
-	global cur_date, morph
-	
 	# чистка от ненужных слов
 	message_text = message_text.split()
 	del message_text[message_text.index("через")]
@@ -98,8 +95,8 @@ def get(message_text):
 	return [date, reminder]
 
 
-def delta_date(message_text):
+def delta_date(message_text, cur_date):
 	try:
-		return get(message_text)
+		return get(message_text, cur_date)
 	except (ValueError, IndexError, RuntimeError, KeyError):
 		return None
