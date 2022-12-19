@@ -11,7 +11,7 @@ from parse.parse_date import get_date
 import sqlalchemy.exc
 
 nest_asyncio.apply()
-BOT_TOKEN = '5890076285:AAG9IIokDP9rE95oZw2K0u0xM1_cWAyFAS8'
+BOT_TOKEN = 'token'
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 db_session.global_init("db/base.db")
@@ -90,4 +90,4 @@ async def function(self):
 		await asyncio.sleep(30)
 
 
-executor.start_polling(dp, skip_updates=True)
+executor.start_polling(dp, skip_updates=True, on_startup=function)
