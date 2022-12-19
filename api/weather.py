@@ -1,5 +1,6 @@
 import os
 import aiohttp
+import datetime
 
 conditions = {'clear': 'ясно', 'partly-cloudy': 'малооблачно', 'cloudy': 'облачно с прояснениями',
               'overcast': 'пасмурно', 'drizzle': 'морось', 'light-rain': 'небольшой дождь',
@@ -26,9 +27,11 @@ CONDITION_TO_SMILE = {
 WEATHER_API_URL = "https://api.weather.yandex.ru/v2/forecast"
 
 
-def get_today_weather(dan):
+def get_today_weather(res):
+    dan = res['fact']
     s = ''
     b = {}
+    b['дата'] = datetime.datetime.fromtimestamp(res['now'])
     b['температура'] = dan['temp']
     s = dan['condition']
     b['осадки'] = conditions[s]
@@ -49,7 +52,7 @@ def obr_forecasts(dan):
     A = []
     for i in range(len(dan)):
         b = {}
-        b['дата'] = dan[i]['date']
+        b['дата'] = datetime.datetime.fromtimestamp(dan[i]['date_ts'])
         b['температура'] = dan[i]['parts']['day_short']['feels_like']
         s = dan[i]['parts']['day_short']['condition']
         b['смайл'] = CONDITION_TO_SMILE[s]
@@ -75,7 +78,7 @@ async def get_weather(latitude, longitude, dayf):
                                    params={'lat': latitude, 'lon': longitude, 'lang': 'ru_RU'},
                                    headers={'X-Yandex-API-Key': token}) as response:
                 response = await response.json()
-                return get_today_weather(response['fact'])
+                return get_today_weather(response)
     else:
         async with aiohttp.ClientSession() as session:
             async with session.get(WEATHER_API_URL,
@@ -83,3 +86,4 @@ async def get_weather(latitude, longitude, dayf):
                                    headers={'X-Yandex-API-Key': token}) as response:
                 response = await response.json()
                 return obr_forecasts(response['forecasts'])
+
