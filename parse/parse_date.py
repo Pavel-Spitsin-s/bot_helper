@@ -16,6 +16,7 @@ def get_date(text, cur_date):
         del text[text.index("поставить")]
         del text[text.index("напоминание")]
 
+    text = ' '.join(text)
     if 'через' in text:
         return delta_date(text, cur_date)
     else:
