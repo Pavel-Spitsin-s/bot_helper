@@ -74,20 +74,21 @@ async def get_reminder(message: types.Message):
 
 
 async def update_reminders():
-	current = datetime.datetime.now()
-	db_sess = db_session.create_session()
-	# получение всех напоминаний, время которых пришло
-	reminders = db_sess.query(Reminder).filter(Reminder.target_time <= current).order_by(Reminder.target_time)
-	for rem in reminders:
-		await bot.send_message(chat_id=rem.user_id, text=f"Не забудьте {rem.action}!")
-		db_sess.delete(rem)
-		db_sess.commit()
-
-
-async def function(self):
 	while 1:
-		await update_reminders()
-		await asyncio.sleep(30)
+		current = datetime.datetime.now()
+		db_sess = db_session.create_session()
+		# получение всех напоминаний, время которых пришло
+		reminders = db_sess.query(Reminder).filter(Reminder.target_time <= current).order_by(Reminder.target_time)
+		for rem in reminders:
+			await bot.send_message(chat_id=f"{rem.user_id}", text=f"Не забудьте {rem.action}!")
+			db_sess.delete(rem)
+			db_sess.commit()
+		await asyncio.sleep(5)
 
 
-executor.start_polling(dp, skip_updates=True, on_startup=function)
+async def on_startup(x):
+	asyncio.create_task(update_reminders())
+
+
+if __name__ == '__main__':
+	executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
