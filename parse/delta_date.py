@@ -7,6 +7,7 @@ def get(message_text, cur_date):
 	morph = pymorphy2.MorphAnalyzer()
 
 	# чистка от ненужных слов
+	message_text = message_text.split()
 	del message_text[message_text.index("через")]
 	if "напомни" in message_text:
 		del message_text[message_text.index("напомни")]
@@ -97,5 +98,5 @@ def get(message_text, cur_date):
 def delta_date(message_text, cur_date):
 	try:
 		return get(message_text, cur_date)
-	except (ValueError, IndexError, RuntimeError, KeyError):
+	except (ValueError, IndexError, RuntimeError, KeyError, AttributeError):
 		return None

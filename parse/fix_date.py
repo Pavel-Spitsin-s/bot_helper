@@ -67,6 +67,7 @@ def get(message_text, cur_date):
 	morph = pymorphy2.MorphAnalyzer()
 
 	# чистка от ненужных слов
+	message_text = message_text.split()
 	if "напомни" in message_text:
 		del message_text[message_text.index("напомни")]
 
@@ -360,5 +361,5 @@ def fix_date(message_text, cur_date):
 	message_text = message_text.replace("-", " ").split()
 	try:
 		return get(message_text, cur_date)
-	except (ValueError, IndexError, RuntimeError, KeyError):
+	except (ValueError, IndexError, RuntimeError, KeyError, AttributeError):
 		return None
