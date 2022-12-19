@@ -10,10 +10,15 @@ from classifier import classify
 from using_db import *
 from update_reminders import update_reminders
 import os
+import asyncio
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
+
+
+async def on_startup(x):
+    asyncio.create_task(update_reminders())
 
 
 async def download_file(message: types.Message):
