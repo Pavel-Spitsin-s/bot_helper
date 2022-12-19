@@ -1,11 +1,14 @@
+from sqlalchemy.orm import Session
+
 from data import db_session
 from parse.parse_date import get_date
 from data.reminder import Reminder
+from data.user import User
 import datetime
 
 
-def add_reminder(text, user_id):
-    db_sess = db_session.create_session()
+def add_reminder(text, user):
+    db_sess = Session.object_session(user)
     cur_date = datetime.datetime.now()
     # пробуем обработать сообщение как напоминание с датой
     response = get_date(text, cur_date)
@@ -14,7 +17,7 @@ def add_reminder(text, user_id):
     date, action = response[0], response[1]
     # если всё нормально - добавляем напоминание в БД
     reminder = Reminder()
-    reminder.user_id = user_id
+    reminder.user = user
     reminder.target_time = date
     reminder.action = action
     db_sess.add(reminder)
