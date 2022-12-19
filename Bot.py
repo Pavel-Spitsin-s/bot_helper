@@ -9,9 +9,10 @@ from data import db_session
 from data.user import User
 from parse.parse_date import get_date
 import sqlalchemy.exc
+import os
 
 nest_asyncio.apply()
-BOT_TOKEN = 'token'
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
 db_session.global_init("db/base.db")
