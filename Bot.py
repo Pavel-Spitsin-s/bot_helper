@@ -18,21 +18,6 @@ dp = Dispatcher(bot)
 db_session.global_init("db/base.db")
 
 
-def parsed_date(date):
-    # возвращает время в формате HH:MM:SS
-    hour = date.hour
-    minute = date.minute
-    second = date.second
-    ans = str(hour) + ":"
-    if minute < 10:
-        ans += "0"
-    ans += str(minute) + ":"
-    if second < 10:
-        ans += "0"
-    ans += str(second)
-    return ans
-
-
 def add_reminder(text, user_id):
     db_sess = db_session.create_session()
     cur_date = datetime.datetime.now()
@@ -48,8 +33,8 @@ def add_reminder(text, user_id):
     reminder.action = action
     db_sess.add(reminder)
     db_sess.commit()
-    return f"""Отлично! Напоминание добавлено.\nВ {parsed_date(date)} {date.day}.{date.month}.{date.year} \
-	вам придет напоминание в формате: 'Не забудьте {response[1]}!'"""
+    return f"""Отлично! Напоминание добавлено.\nВ {date.strftime('%H:%M:%S %d.%m.%Y')} \
+    вам придет напоминание в формате: 'Не забудьте {response[1]}!'"""
 
 
 @dp.message_handler(commands=['start'])
