@@ -15,9 +15,8 @@ from api.weather import get_weather
 from utils.utils import get_loc_from_doc, text2doc, get_date_diff_from_message
 
 load_dotenv()
-BOT_TOKEN = '5692285683:AAEbFU6BW1NhErz34bEVoId2TJG55mui7Tk'
 
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher(bot)
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
