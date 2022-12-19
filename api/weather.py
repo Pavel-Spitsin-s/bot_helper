@@ -29,7 +29,6 @@ WEATHER_API_URL = "https://api.weather.yandex.ru/v2/forecast"
 
 def get_today_weather(res):
     dan = res['fact']
-    s = ''
     b = {}
     b['дата'] = datetime.datetime.fromtimestamp(res['now'])
     b['температура'] = dan['temp']
