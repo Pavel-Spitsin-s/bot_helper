@@ -65,6 +65,11 @@ WEEKDAYS = {
 def get(message_text, cur_date):
 	global NUMBERS, MONTHS, WEEKDAYS
 	morph = pymorphy2.MorphAnalyzer()
+
+	# чистка от ненужных слов
+	if "напомни" in message_text:
+		del message_text[message_text.index("напомни")]
+
 	nums = []
 	date_ids = []
 	weekday = cur_date.weekday()

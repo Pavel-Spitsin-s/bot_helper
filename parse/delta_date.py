@@ -7,7 +7,6 @@ def get(message_text, cur_date):
 	morph = pymorphy2.MorphAnalyzer()
 
 	# чистка от ненужных слов
-	message_text = message_text.split()
 	del message_text[message_text.index("через")]
 	if "напомни" in message_text:
 		del message_text[message_text.index("напомни")]
