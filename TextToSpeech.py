@@ -7,7 +7,7 @@ sample_rate = 48000
 speaker = 'xenia'  # aidar, baya, kseniya, xenia, random
 put_accent = True
 put_yo = True
-device = torch.device('cpu')
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 model, _ = torch.hub.load(repo_or_dir='snakers4/silero-models', model='silero_tts',
                           language=language, speaker=model_id)
 model.to(device)

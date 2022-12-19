@@ -1,9 +1,6 @@
 from data.models.__all_models import *
 from data.models import db_session
-
-db_session.global_init("data/database.db")
-db_sess = db_session.create_session()
-
+from using_db import db_sess
 import csv
 from data.models.series import Series
 from data.models.joke import Joke

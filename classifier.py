@@ -1,17 +1,19 @@
-from intents import JokesGen, SelectFilm, SelectSeries, LastNews
+from intents import JokesGen, SelectFilm, SelectSeries, LastNews, add_reminder
 
 
-def classify(text):
-    if 'анекдот' in text or 'шутк' in text:
+def classify(text, user):
+    if any(w in text for w in ('анекдот', 'шутк')):
         return ['анекдот', JokesGen.get_joke()]
-    elif 'фильм' in text or 'кино' in text:
+    elif any(w in text for w in ('фильм', 'кино')):
         return ['фильм', SelectFilm.select_film()]
-    elif 'сериал' in text:
+    elif any(w in text for w in ('сериал',)):
         return ['сериал', SelectSeries.select_series()]
-    elif 'заметка' in text:
+    elif any(w in text for w in ('заметка',)):
         text = text.replace('заметка', 'Заметка:')
         return ['заметка', text]
-    elif 'новост' in text or 'ново' in text:
+    elif any(w in text for w in ('новост',  'ново')):
         return ['новость', LastNews.last_news()]
+    elif any(w in text for w in ('напомн', 'напомин')):
+        return ['напоминание', add_reminder.add_reminder(text, user)]
     else:
         return ['болталка', 'Извините, не поняла вас']

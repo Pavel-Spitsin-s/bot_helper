@@ -6,16 +6,22 @@ db_session.global_init("data/database.db")
 db_sess = db_session.create_session()
 
 
+def add_user(message: types.Message):
+    tgid = message.chat.id
+    user = db_sess.query(User).filter(User.tg_id == tgid).one_or_none()
+    if user is None:
+        user = User()
+        user.tg_id = tgid
+        db_sess.add(user)
+    return user
+
+
 def add_to_data(message_: types.Message, intent):
-    msg = message.Message()
+    msg = Message()
     msg.text = message_.text
     msg.datetime = message_.date
     msg.intent = intent
-    tgid = message_.chat.id
-    user_ = db_sess.query(user.User).filter(user.User.tg_id == tgid).one_or_none()
-    if user_ is None:
-        user_ = user.User()
-        user_.tg_id = tgid
+    user_ = add_user()
     msg.user = user_
     db_sess.add(msg)
     db_sess.commit()

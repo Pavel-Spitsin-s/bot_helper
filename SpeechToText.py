@@ -4,7 +4,7 @@ from vosk import Model, KaldiRecognizer
 
 # speech to text
 rate = 44100  # 44100 / 8000
-speech_model = Model('models/small model')  # small model / model
+speech_model = Model('models/small_model')  # small_model / model
 rec = KaldiRecognizer(speech_model, rate)
 
 
