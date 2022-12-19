@@ -14,8 +14,18 @@ wind_dirs = {'nw': 'СЗ', 'n': 'С', 'ne': 'СВ', 'e': 'В',
 type_prec = {'0': 'без осадков', '1': 'дождь', '2': 'дождь со снегом', '3': 'снег', '4': 'град'}
 clowness = {'0': 'ясно', '0.25': 'малооблачно', '0.5': 'облачно с прояснениями', '0.75': 'облачно с прояснениями',
             '1': 'пасмурно'}
+CONDITION_TO_SMILE = {
+    'clear': '☀️', 'partly-cloudy': '⛅', 'cloudy': '⛅',
+    'overcast': '☁️', 'drizzle': '🌧', 'light-rain': '🌧', 'rain': '🌧',
+    'moderate-rain': '🌧', 'heavy-rain': '🌧', 'continuous-heavy-rain': '🌧',
+    'showers': '🌧', 'wet-snow': '❄️', 'light-snow': '❄️', 'snow': '❄️',
+    'snow-showers': '❄️', 'hail': '🌧', 'thunderstorm': '⚡',
+    'thunderstorm-with-rain': '⛈', 'thunderstorm-with-hail': '⛈'
+}
 
-WEATHER_API_URL = "https://api.weather.yandex.ru/v2/forecast?"
+WEATHER_API_URL = "https://api.weather.yandex.ru/v2/forecast"
+
+
 def get_today_weather(dan):
     s = ''
     b = {}
@@ -31,6 +41,7 @@ def get_today_weather(dan):
     s = dan['cloudness']
     b['ясность'] = str(clowness[str(s)])
     b['давление'] = dan['pressure_mm']
+    b['смайл'] = CONDITION_TO_SMILE[dan['condition']]
     return b
 
 
@@ -41,6 +52,7 @@ def obr_forecasts(dan):
         b['дата'] = dan[i]['date']
         b['температура'] = dan[i]['parts']['day_short']['feels_like']
         s = dan[i]['parts']['day_short']['condition']
+        b['смайл'] = CONDITION_TO_SMILE[s]
         b['осадки'] = conditions[s]
         b['скорость ветра'] = dan[i]['parts']['day_short']['wind_speed']
         s = dan[i]['parts']['day_short']['wind_dir']
