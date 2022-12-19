@@ -98,7 +98,7 @@ def get(message_text, cur_date):
                 continue
 
             # парсинг часа (в половину ... / половина ...)
-            if message_text[i + 1].isnumeric():
+            if message_text[i + 1].isdigit():
                 hour = int(message_text[i + 1])
             else:
                 try:
@@ -124,7 +124,7 @@ def get(message_text, cur_date):
 
         # если время задано в формате: без ... [минут] ... [утра / дня / вечера]
         if word == "без":
-            if message_text[i + 1].isnumeric():
+            if message_text[i + 1].isdigit():
                 minute = int(message_text[i + 1])
             else:
                 minute = w2n.word_to_num(message_text[i + 1])
@@ -135,7 +135,7 @@ def get(message_text, cur_date):
                 date_ids.append(j)
                 j += 1
                 skip += 1
-            if message_text[j].isnumeric():
+            if message_text[j].isdigit():
                 hour = int(message_text[j])
             else:
                 hour = w2n.word_to_num(message_text[j])
@@ -159,24 +159,30 @@ def get(message_text, cur_date):
 
         # если задано конкретное время
         if ":" in word:
-            _hour = int(word.split(':')[0])
-            _minute = int(word.split(':')[1])
-            date_ids.append(i)
-            continue
+            try:
+                _hour = int(word.split(':')[0])
+                _minute = int(word.split(':')[1])
+                date_ids.append(i)
+                continue
+            except (IndexError, ValueError):
+                pass
 
         # если задана конкретная дата
         if "." in word:
-            # конкретная дата с годом
-            if word.count(".") == 2:
-                _year = int(word.split(".")[2])
-                _month = int(word.split(".")[1])
-                _day = int(word.split(".")[0])
-            # конкретная дата без года
-            else:
-                _month = int(word.split(".")[1])
-                _day = int(word.split(".")[0])
-            date_ids.append(i)
-            continue
+            try:
+                # конкретная дата с годом
+                if word.count(".") == 2:
+                    _year = int(word.split(".")[2])
+                    _month = int(word.split(".")[1])
+                    _day = int(word.split(".")[0])
+                # конкретная дата без года
+                else:
+                    _month = int(word.split(".")[1])
+                    _day = int(word.split(".")[0])
+                date_ids.append(i)
+                continue
+            except (IndexError, ValueError):
+                pass
 
         # ключевые слова, указывающие на конкретное время
         if word == "полночь":
@@ -196,7 +202,7 @@ def get(message_text, cur_date):
             continue
 
         # если слово - в точности число
-        if word.isnumeric():
+        if word.isdigit():
             # прибавляем к тому, что уже есть, если в последнем числе в стеке не поменян старший разряд текущего числа
             if len(nums) > 0 and len(str(nums[-1])) > len(word) and int(str(nums[-1])[-len(word):]) == 0:
                 nums[-1] += int(word)

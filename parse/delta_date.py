@@ -17,7 +17,7 @@ def get(message_text, cur_date):
     for i in range(len(message_text)):
         word = message_text[i]
         # если слово - число
-        if word.isnumeric():
+        if word.isdigit():
             num = int(word)
             if len(nums) > 0 and (len(str(nums[-1])) > len(word) or (nums[-1] == 0 and num > 0)):
                 nums[-1] += num
@@ -27,9 +27,13 @@ def get(message_text, cur_date):
             continue
 
         if ":" in word:
-            hour = int(word.split(":")[0])
-            minute = int(word.split(":")[1])
-            date += datetime.timedelta(hours=hour, minutes=minute)
+            try:
+                hour = int(word.split(":")[0])
+                minute = int(word.split(":")[1])
+                date += datetime.timedelta(hours=hour, minutes=minute)
+                continue
+            except (IndexError, ValueError):
+                pass
 
         # перевод слова в форму ед.ч. И.п.
         word1 = morph.parse(word)[0]
@@ -76,7 +80,7 @@ def get(message_text, cur_date):
                 date += datetime.timedelta(minutes=30)
                 date_ids.append(i)
 
-    # если в массиве остались числа - это может быть время без ключевых слов (три тридцать пять = 3 ч. 55 мин.)
+    # если в массиве остались числа - это может быть время без ключевых слов (три тридцать пять = 3 ч. 35 мин.)
     if len(nums) > 0:
         date += datetime.timedelta(minutes=nums[-1])
         del nums[-1]
