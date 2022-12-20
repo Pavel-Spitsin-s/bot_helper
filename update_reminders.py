@@ -1,6 +1,6 @@
 import datetime
 from data import db_session
-from data.reminder import Reminder
+from data.models.reminder import Reminder
 import asyncio
 
 
