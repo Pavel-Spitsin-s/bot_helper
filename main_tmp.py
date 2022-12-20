@@ -50,15 +50,15 @@ async def message_handler(message: types.Message):
         if diff != 1:
             weather = weather[diff - 1]
 
-        date_str = weather['дата'].strftime('%d.%m.%Y')
+        date_str = weather['date'].strftime('%d.%m.%Y')
         await message.answer_photo(
             get_toponym_map_url(toponym),
-            f'*{weather["смайл"]} Погода в {get_toponym_name(toponym)} на {date_str}*\n'
-            f'*{weather["осадки"].capitalize()}*\n'
-            f'*Температура*: {weather["температура"]} °C\n'
-            f'*Атмосферное давление*: {weather["давление"]} мм рт. ст.\n'
-            f'*Влажность*: {weather["влажность"]}%.\n'
-            f'*Скорость ветра*: {weather["скорость ветра"]} м/с, {weather["направление ветра"]}.\n',
+            f'*{weather["smile"]} Погода в {get_toponym_name(toponym)} на {date_str}*\n'
+            f'*{weather["condition"].capitalize()}*\n'
+            f'*Температура*: {weather["temperature"]} °C\n'
+            f'*Атмосферное давление*: {weather["pressure"]} мм рт. ст.\n'
+            f'*Влажность*: {weather["humidity"]}%.\n'
+            f'*Скорость ветра*: {weather["wind_speed"]} м/с, {weather["wind_dir"]}.\n',
             parse_mode='markdown'
         )
     else:
