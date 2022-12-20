@@ -2,19 +2,28 @@ import os
 import aiohttp
 import datetime
 
-conditions = {'clear': 'ясно', 'partly-cloudy': 'малооблачно', 'cloudy': 'облачно с прояснениями',
-              'overcast': 'пасмурно', 'drizzle': 'морось', 'light-rain': 'небольшой дождь',
-              'rain': 'дождь', 'moderate-rain': 'умеренно сильный', 'heavy-rain': 'сильный дождь',
-              'continuous-heavy-rain': 'длительный сильный дождь', 'showers': 'ливень',
-              'wet-snow': 'дождь со снегом', 'light-snow': 'небольшой снег', 'snow': 'снег',
-              'snow-showers': 'снегопад', 'hail': 'град', 'thunderstorm': 'гроза',
-              'thunderstorm-with-rain': 'дождь с грозой', 'thunderstorm-with-hail': 'гроза с градом'
-              }
-wind_dirs = {'nw': 'СЗ', 'n': 'С', 'ne': 'СВ', 'e': 'В',
-             'se': 'ЮВ', 's': 'Ю', 'sw': 'ЮЗ', 'w': 'З', 'с': 'штиль'}
-type_prec = {'0': 'без осадков', '1': 'дождь', '2': 'дождь со снегом', '3': 'снег', '4': 'град'}
-clowness = {'0': 'ясно', '0.25': 'малооблачно', '0.5': 'облачно с прояснениями', '0.75': 'облачно с прояснениями',
-            '1': 'пасмурно'}
+WEATHER_API_URL = "https://api.weather.yandex.ru/v2/forecast"
+
+conditions = {
+    'clear': 'ясно', 'partly-cloudy': 'малооблачно', 'cloudy': 'облачно с прояснениями',
+    'overcast': 'пасмурно', 'drizzle': 'морось', 'light-rain': 'небольшой дождь',
+    'rain': 'дождь', 'moderate-rain': 'умеренно сильный', 'heavy-rain': 'сильный дождь',
+    'continuous-heavy-rain': 'длительный сильный дождь', 'showers': 'ливень',
+    'wet-snow': 'дождь со снегом', 'light-snow': 'небольшой снег', 'snow': 'снег',
+    'snow-showers': 'снегопад', 'hail': 'град', 'thunderstorm': 'гроза',
+    'thunderstorm-with-rain': 'дождь с грозой', 'thunderstorm-with-hail': 'гроза с градом'
+}
+wind_dirs = {
+    'nw': 'СЗ', 'n': 'С', 'ne': 'СВ', 'e': 'В',
+    'se': 'ЮВ', 's': 'Ю', 'sw': 'ЮЗ', 'w': 'З', 'с': 'штиль'
+}
+type_prec = {
+    '0': 'без осадков', '1': 'дождь', '2': 'дождь со снегом', '3': 'снег', '4': 'град'
+}
+clowness = {
+    '0': 'ясно', '0.25': 'малооблачно', '0.5': 'облачно с прояснениями', '0.75': 'облачно с прояснениями',
+    '1': 'пасмурно'
+}
 CONDITION_TO_SMILE = {
     'clear': '☀️', 'partly-cloudy': '⛅', 'cloudy': '⛅',
     'overcast': '☁️', 'drizzle': '🌧', 'light-rain': '🌧', 'rain': '🌧',
@@ -23,8 +32,6 @@ CONDITION_TO_SMILE = {
     'snow-showers': '❄️', 'hail': '🌧', 'thunderstorm': '⚡',
     'thunderstorm-with-rain': '⛈', 'thunderstorm-with-hail': '⛈'
 }
-
-WEATHER_API_URL = "https://api.weather.yandex.ru/v2/forecast"
 
 
 def get_today_weather(res):
@@ -85,4 +92,3 @@ async def get_weather(latitude, longitude, dayf):
                                    headers={'X-Yandex-API-Key': token}) as response:
                 response = await response.json()
                 return obr_forecasts(response['forecasts'])
-
