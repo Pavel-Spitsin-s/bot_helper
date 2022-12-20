@@ -30,20 +30,20 @@ WEATHER_API_URL = "https://api.weather.yandex.ru/v2/forecast"
 def get_today_weather(res):
     dan = res['fact']
     b = {}
-    b['дата'] = datetime.datetime.fromtimestamp(res['now'])
-    b['температура'] = dan['temp']
-    s = dan['condition']
-    b['осадки'] = conditions[s]
-    b['скорость ветра'] = dan['wind_speed']
+    b['date'] = datetime.datetime.fromtimestamp(res['now'])
+    b['tempreture'] = dan['temp']
+    s = dan['conditions']
+    b['condition'] = conditions[s]
+    b['wind_speed'] = dan['wind_speed']
     s = dan['wind_dir']
-    b['направление ветра'] = wind_dirs[s]
-    b['влажность'] = dan['humidity']
+    b['wind_dir'] = wind_dirs[s]
+    b['humidity'] = dan['humidity']
     s = dan['prec_type']
-    b['тип осадков'] = type_prec[str(s)]
+    b['type_prec'] = type_prec[str(s)]
     s = dan['cloudness']
-    b['ясность'] = str(clowness[str(s)])
-    b['давление'] = dan['pressure_mm']
-    b['смайл'] = CONDITION_TO_SMILE[dan['condition']]
+    b['cloudness'] = str(clowness[str(s)])
+    b['pressure'] = dan['pressure_mm']
+    b['smile'] = CONDITION_TO_SMILE[dan['condition']]
     return b
 
 
@@ -51,20 +51,20 @@ def obr_forecasts(dan):
     A = []
     for i in range(len(dan)):
         b = {}
-        b['дата'] = datetime.datetime.fromtimestamp(dan[i]['date_ts'])
-        b['температура'] = dan[i]['parts']['day_short']['feels_like']
+        b['date'] = datetime.datetime.fromtimestamp(dan[i]['date_ts'])
+        b['tempreture'] = dan[i]['parts']['day_short']['feels_like']
         s = dan[i]['parts']['day_short']['condition']
-        b['смайл'] = CONDITION_TO_SMILE[s]
-        b['осадки'] = conditions[s]
-        b['скорость ветра'] = dan[i]['parts']['day_short']['wind_speed']
+        b['smile'] = CONDITION_TO_SMILE[s]
+        b['conditions'] = conditions[s]
+        b['wind_speed'] = dan[i]['parts']['day_short']['wind_speed']
         s = dan[i]['parts']['day_short']['wind_dir']
-        b['направление ветра'] = wind_dirs[s]
-        b['влажность'] = dan[i]['parts']['day_short']['humidity']
+        b['wind_deer'] = wind_dirs[s]
+        b['humidity'] = dan[i]['parts']['day_short']['humidity']
         s = dan[i]['parts']['day_short']['prec_type']
-        b['тип осадков'] = type_prec[str(s)]
+        b['type_prec'] = type_prec[str(s)]
         s = dan[i]['parts']['day_short']['cloudness']
-        b['ясность'] = str(clowness[str(s)])
-        b['давление'] = dan[i]['parts']['day_short']['pressure_mm']
+        b['cloudness'] = str(clowness[str(s)])
+        b['pressure'] = dan[i]['parts']['day_short']['pressure_mm']
         A.append(b)
     return A
 
