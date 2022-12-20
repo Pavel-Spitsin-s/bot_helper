@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from parse.parse_date import get_date
-from data.reminder import Reminder
+from data.models.reminder import Reminder
 import datetime
 
 
@@ -21,6 +21,6 @@ def add_reminder(text, user):
     reminder.action = action
     db_sess.add(reminder)
     db_sess.commit()
-    
+
     return f"""Отлично! Напоминание добавлено.\nВ {date.strftime('%H:%M:%S %d.%m.%Y')}\
     вам придет напоминание в формате: 'Не забудьте {response[1]}!'"""
