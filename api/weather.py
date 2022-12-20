@@ -38,8 +38,8 @@ def get_today_weather(res):
     dan = res['fact']
     b = {}
     b['date'] = datetime.datetime.fromtimestamp(res['now'])
-    b['tempreture'] = dan['temp']
-    s = dan['conditions']
+    b['temperature'] = dan['temp']
+    s = dan['condition']
     b['condition'] = conditions[s]
     b['wind_speed'] = dan['wind_speed']
     s = dan['wind_dir']
@@ -59,10 +59,10 @@ def obr_forecasts(dan):
     for i in range(len(dan)):
         b = {}
         b['date'] = datetime.datetime.fromtimestamp(dan[i]['date_ts'])
-        b['tempreture'] = dan[i]['parts']['day_short']['feels_like']
+        b['temperature'] = dan[i]['parts']['day_short']['feels_like']
         s = dan[i]['parts']['day_short']['condition']
         b['smile'] = CONDITION_TO_SMILE[s]
-        b['conditions'] = conditions[s]
+        b['condition'] = conditions[s]
         b['wind_speed'] = dan[i]['parts']['day_short']['wind_speed']
         s = dan[i]['parts']['day_short']['wind_dir']
         b['wind_deer'] = wind_dirs[s]
