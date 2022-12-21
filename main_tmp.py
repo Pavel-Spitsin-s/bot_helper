@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import datetime
-
 from dotenv import load_dotenv
 from aiogram import Bot, types
 from aiogram.utils import executor
@@ -46,9 +44,7 @@ async def message_handler(message: types.Message):
     # await message.answer("```" + json.dumps(res, indent=4, ensure_ascii=False) + "```", parse_mode='markdown')
 
     if toponym is not None:
-        weather = (await get_weather(*get_toponym_coords(toponym), diff))
-        if diff != 1:
-            weather = weather[diff - 1]
+        weather = (await get_weather(*get_toponym_coords(toponym), diff))[diff - 1]
 
         date_str = weather['date'].strftime('%d.%m.%Y')
         await message.answer_photo(

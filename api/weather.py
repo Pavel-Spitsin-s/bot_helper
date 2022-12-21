@@ -34,49 +34,35 @@ CONDITION_TO_EMOJI = {
 }
 
 
-def get_today_weather(res):
-    dan = res['fact']
+def common(res, a):
     b = {}
-    b['date'] = datetime.datetime.fromtimestamp(res['now'])
-    b['temperature'] = dan['temp']
-    s = dan['condition']
-    b['condition'] = conditions[s]
-    b['wind_speed'] = dan['wind_speed']
-    s = dan['wind_dir']
-    b['wind_dir'] = wind_dirs[s]
-    b['humidity'] = dan['humidity']
-    s = dan['prec_type']
-    b['type_prec'] = type_prec[str(s)]
-    s = dan['cloudness']
-    b['cloudness'] = str(clowness[str(s)])
-    b['pressure'] = dan['pressure_mm']
-    b['emoji'] = CONDITION_TO_EMOJI[dan['condition']]
-    return b
-
-
-def obr_forecasts(dan):
     A = []
-    for i in range(len(dan)):
-        b = {}
-        b['date'] = datetime.datetime.fromtimestamp(dan[i]['date_ts'])
-        b['temperature'] = dan[i]['parts']['day_short']['feels_like']
-        s = dan[i]['parts']['day_short']['condition']
-        b['emoji'] = CONDITION_TO_EMOJI[s]
+    for i in range(len(res)):
+        if a == 1:
+            dan = res['fact']
+            b['date'] = datetime.datetime.fromtimestamp(res['now'])
+            b['temperature'] = dan['temp']
+        else:
+            dan = res[i]['parts']['day_short']
+            b['date'] = datetime.datetime.fromtimestamp(res[i]['date_ts'])
+            b['temperature'] = dan['feels_like']
+        s = dan['condition']
         b['condition'] = conditions[s]
-        b['wind_speed'] = dan[i]['parts']['day_short']['wind_speed']
-        s = dan[i]['parts']['day_short']['wind_dir']
+        b['wind_speed'] = dan['wind_speed']
+        s = dan['wind_dir']
         b['wind_dir'] = wind_dirs[s]
-        b['humidity'] = dan[i]['parts']['day_short']['humidity']
-        s = dan[i]['parts']['day_short']['prec_type']
+        b['humidity'] = dan['humidity']
+        s = dan['prec_type']
         b['type_prec'] = type_prec[str(s)]
-        s = dan[i]['parts']['day_short']['cloudness']
+        s = dan['cloudness']
         b['cloudness'] = str(clowness[str(s)])
-        b['pressure'] = dan[i]['parts']['day_short']['pressure_mm']
+        b['pressure'] = dan['pressure_mm']
+        b['emoji'] = CONDITION_TO_EMOJI[dan['condition']]
         A.append(b)
     return A
 
 
-async def get_weather(latitude, longitude, dayf):
+async def get_weather(longitude, latitude, dayf):
     token = os.getenv('WEATHER_APIKEY')
     if dayf == 1:
         async with aiohttp.ClientSession() as session:
@@ -84,11 +70,11 @@ async def get_weather(latitude, longitude, dayf):
                                    params={'lat': latitude, 'lon': longitude, 'lang': 'ru_RU'},
                                    headers={'X-Yandex-API-Key': token}) as response:
                 response = await response.json()
-                return get_today_weather(response)
+                return common(response, 1)
     else:
         async with aiohttp.ClientSession() as session:
             async with session.get(WEATHER_API_URL,
                                    params={'lat': latitude, 'lon': longitude, 'lang': 'ru_RU', 'limit': dayf},
                                    headers={'X-Yandex-API-Key': token}) as response:
                 response = await response.json()
-                return obr_forecasts(response['forecasts'])
+                return common(response['forecasts'], 2)
