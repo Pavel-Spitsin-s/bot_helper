@@ -16,12 +16,17 @@ def add_user(message: types.Message):
     return user
 
 
-def add_to_data(message_: types.Message, intent):
+def add_to_data(message: types.Message, answer, intent):
     msg = Message()
-    msg.text = message_.text
-    msg.datetime = message_.date
+    msg.text = message.text
+    msg.datetime = message.date
     msg.intent = intent
-    user_ = add_user()
-    msg.user = user_
+    ans_text = ''
+    for i in answer:
+        if i.isalpha() or i in '.,)(:;"[]-_=+ ':
+            ans_text += i
+    msg.answer = ans_text
+    user = add_user(message)
+    msg.user = user
     db_sess.add(msg)
     db_sess.commit()

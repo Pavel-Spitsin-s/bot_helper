@@ -18,7 +18,7 @@ dp = Dispatcher(bot)
 
 
 async def on_startup(x):
-    asyncio.create_task(update_reminders())
+    asyncio.create_task(update_reminders(bot))
 
 
 async def download_file(message: types.Message):
@@ -35,7 +35,7 @@ async def text_message(message: types.Message):
     text = message.text.lower()
     if text:
         res = classify(text, add_user(message))
-        add_to_data(message, res[0])
+        add_to_data(message, res[1], res[0])
         await message.answer(res[1])
 
     else:
@@ -46,10 +46,11 @@ async def text_message(message: types.Message):
 async def voice_message(message: types.Message):
     await download_file(message)
     text = await speech_to_text(message)
+    message.text = text
     if text:
         res = classify(text, add_user(message))
-        add_to_data(message, res[0])
-        if len(res) <= 1000:
+        add_to_data(message, res[1], res[0])
+        if len(res[1]) < 1000:
             await message.answer_voice(open(text_to_speech(res[1]), 'rb'), res[1])
         else:
             await message.answer(res[1])

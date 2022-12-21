@@ -1,4 +1,4 @@
-from intents import JokesGen, SelectFilm, SelectSeries, LastNews, add_reminder
+from intents import JokesGen, SelectFilm, SelectSeries, LastNews, add_reminder, talking
 
 
 def classify(text, user):
@@ -16,4 +16,4 @@ def classify(text, user):
     elif any(w in text for w in ('напомн', 'напомин')):
         return ['напоминание', add_reminder.add_reminder(text, user)]
     else:
-        return ['болталка', 'Извините, не поняла вас']
+        return ['болталка', talking.get_next_sequence(text, user)]

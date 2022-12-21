@@ -8,6 +8,7 @@ class Message(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'message'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True, unique=True)
     text = sqlalchemy.Column(sqlalchemy.String)
+    answer = sqlalchemy.Column(sqlalchemy.String)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey('user.id'))
     datetime = sqlalchemy.Column(sqlalchemy.DATETIME)

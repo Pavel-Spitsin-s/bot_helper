@@ -18,3 +18,9 @@ vosk
 sqlalchemy
 requests
 beautifulsoup4
+
+# reminder
+nest_asyncio
+pymorphy2
+ru_word2number
+sqlalchemy
