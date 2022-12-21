@@ -24,7 +24,7 @@ clowness = {
     '0': 'ясно', '0.25': 'малооблачно', '0.5': 'облачно с прояснениями', '0.75': 'облачно с прояснениями',
     '1': 'пасмурно'
 }
-CONDITION_TO_SMILE = {
+CONDITION_TO_EMOJI = {
     'clear': '☀️', 'partly-cloudy': '⛅', 'cloudy': '⛅',
     'overcast': '☁️', 'drizzle': '🌧', 'light-rain': '🌧', 'rain': '🌧',
     'moderate-rain': '🌧', 'heavy-rain': '🌧', 'continuous-heavy-rain': '🌧',
@@ -50,7 +50,7 @@ def get_today_weather(res):
     s = dan['cloudness']
     b['cloudness'] = str(clowness[str(s)])
     b['pressure'] = dan['pressure_mm']
-    b['smile'] = CONDITION_TO_SMILE[dan['condition']]
+    b['emoji'] = CONDITION_TO_EMOJI[dan['condition']]
     return b
 
 
@@ -61,11 +61,11 @@ def obr_forecasts(dan):
         b['date'] = datetime.datetime.fromtimestamp(dan[i]['date_ts'])
         b['temperature'] = dan[i]['parts']['day_short']['feels_like']
         s = dan[i]['parts']['day_short']['condition']
-        b['smile'] = CONDITION_TO_SMILE[s]
+        b['emoji'] = CONDITION_TO_EMOJI[s]
         b['condition'] = conditions[s]
         b['wind_speed'] = dan[i]['parts']['day_short']['wind_speed']
         s = dan[i]['parts']['day_short']['wind_dir']
-        b['wind_deer'] = wind_dirs[s]
+        b['wind_dir'] = wind_dirs[s]
         b['humidity'] = dan[i]['parts']['day_short']['humidity']
         s = dan[i]['parts']['day_short']['prec_type']
         b['type_prec'] = type_prec[str(s)]

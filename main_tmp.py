@@ -53,7 +53,7 @@ async def message_handler(message: types.Message):
         date_str = weather['date'].strftime('%d.%m.%Y')
         await message.answer_photo(
             get_toponym_map_url(toponym),
-            f'*{weather["smile"]} Погода в {get_toponym_name(toponym)} на {date_str}*\n'
+            f'*{weather["emoji"]} Погода в {get_toponym_name(toponym)} на {date_str}*\n'
             f'*{weather["condition"].capitalize()}*\n'
             f'*Температура*: {weather["temperature"]} °C\n'
             f'*Атмосферное давление*: {weather["pressure"]} мм рт. ст.\n'
