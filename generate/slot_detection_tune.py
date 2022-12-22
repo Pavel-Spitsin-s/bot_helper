@@ -1,12 +1,13 @@
 import tune_the_model as ttm
 
 ttm.set_api_key(
-    'API_KEY'
+    os.getenv('API_KEY')
 )
+
 
 IDS = {
     "base_model": "3wp7he0qx1577o8jsowqb00k1gcrmo3l",  # стандартная обученная модель
-    "ru_model": "3wp7he0qx1577o8jsowqb00k1gcrmo3l",  # модель доученная на датасете из 16k сообщений
+    "ru_model": "c704c84bbd19086594a629fb224e8c76",  # модель доученная на датасете из 16k сообщений
 }
 
 base_slot = ttm.TuneTheModel.from_id(IDS["ru_model"])
