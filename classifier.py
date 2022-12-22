@@ -3,7 +3,6 @@ from intents.select_film import *
 from intents.select_series import *
 from intents.last_news import *
 from intents.talking import *
-from intents.add_reminder import *
 
 
 async def classify(text, user):
@@ -18,7 +17,5 @@ async def classify(text, user):
         return ['заметка', text]
     elif any(w in text for w in ('новост',  'ново')):
         return ['новость', await last_news()]
-    elif any(w in text for w in ('напомн', 'напомин')):
-        return ['напоминание', await add_reminder(text, user)]
     else:
         return ['болталка', await get_next_sequence(text, user, 0)]

@@ -19,6 +19,7 @@ vosk
 sqlalchemy
 requests
 beautifulsoup4
+transformers
 
 # reminder
 nest_asyncio

@@ -8,17 +8,12 @@ from speech2text import speech_to_text, rate
 from text2speech import text_to_speech
 from classifier import classify
 from using_db import *
-from update_reminders import update_reminders
 import os
 import asyncio
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
-
-
-async def on_startup(x):
-    asyncio.create_task(update_reminders(bot))
 
 
 async def download_file(message: types.Message):
@@ -58,4 +53,4 @@ async def voice_message(message: types.Message):
         await message.answer("Извините, не поняла вас, повторите, пожалуйста еще раз.")
 
 
-executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
+executor.start_polling(dp, skip_updates=True)

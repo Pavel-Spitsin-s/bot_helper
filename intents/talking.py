@@ -1,14 +1,17 @@
 import torch
 from transformers import AutoTokenizer, AutoModelWithLMHead
 from using_db import *
+import re
 
 tokenizer = AutoTokenizer.from_pretrained('tinkoff-ai/ruDialoGPT-small')
 model = AutoModelWithLMHead.from_pretrained('tinkoff-ai/ruDialoGPT-small')
 
 
 async def get_next_sequence(msg, user, depth):
-    last = db_sess.query(Message).filter(Message.user_id == user.id and Message.intent == 'болталка').all()[-1:]
-    text = ''
+    last = db_sess.query(Message) \
+               .filter(Message.user_id == user.id) \
+               .filter(Message.intent == 'болталка').all()[-2:]
+    text = 'ВТОРОЙ - девушка по имени Уэнсдэй'
     for i in last:
         text += f'@@ПЕРВЫЙ@@ {i.text} @@ВТОРОЙ@@ {i.answer} '
     text += f'@@ПЕРВЫЙ@@ {msg} @@ВТОРОЙ@@ '
@@ -31,20 +34,10 @@ async def get_next_sequence(msg, user, depth):
     s = [tokenizer.decode(sample_token_ids) for sample_token_ids in generated_token_ids][0]
     print(s)
 
-    res = []
-    for seq in s.split('@@ПЕРВЫЙ@@'):
-        for segm in seq.split('@@ВТОРОЙ@@'):
-            res.append(segm)
-    # print(res)
+    res = re.split(r'@@ПЕРВЫЙ@@|@@ВТОРОЙ@@', s)
     for i in range(len(res) - 2, -1, -1):
         if res[i] == f' {msg} ':
-            ln = len(res[i + 1])
-            cnt_let = 0
-            CHARACTERS = '.,)(:;"[]- '
-            for char in res[i + 1]:
-                if char.isalpha() or char in CHARACTERS:
-                    cnt_let += 1
-            if cnt_let / ln > 0.6 or depth > 5:
+            letters = re.sub(r'[^a-zа-яё.,)(:;\"\[\]\-\s]', '', res[i + 1], flags=re.UNICODE | re.IGNORECASE)
+            if len(letters) / len(res[i + 1]) > 0.6 or depth > 5:
                 return res[i + 1]
             return await get_next_sequence(msg, user, depth + 1)
-
