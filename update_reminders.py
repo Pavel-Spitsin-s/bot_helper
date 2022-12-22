@@ -1,13 +1,12 @@
 import datetime
-from data import db_session
+from using_db import db_sess
 from data.models.reminder import Reminder
 import asyncio
 
 
 async def update_reminders(bot):
-    while 1:
+    while True:
         current = datetime.datetime.now()
-        db_sess = db_session.create_session()
 
         # получение всех напоминаний, время которых пришло
         reminders = db_sess.query(Reminder).filter(Reminder.target_time <= current).order_by(Reminder.target_time)

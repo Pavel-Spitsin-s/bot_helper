@@ -9,11 +9,22 @@ from text2speech import text_to_speech
 from classifier import classify
 from using_db import *
 import os
+import tune_the_model as ttm
 import asyncio
+from generate import slot_detection_tune
+from intents import talking
+from update_reminders import update_reminders
+
+talking.run()
+slot_detection_tune.run()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(bot)
+
+
+async def on_startup(x):
+    asyncio.create_task(update_reminders(bot))
 
 
 async def download_file(message: types.Message):
@@ -34,7 +45,7 @@ async def text_message(message: types.Message):
         await message.answer(res[1])
 
     else:
-        await message.answer("Извините, не поняла вас, повторите, пожалуйста, еще раз.")
+        await message.answer("Извините, не поняла вас, повторите, пожалуйста, еще раз.", parse_mode='markdown')
 
 
 @dp.message_handler(content_types=[ContentType.VOICE])
@@ -50,7 +61,7 @@ async def voice_message(message: types.Message):
         else:
             await message.answer(res[1])
     else:
-        await message.answer("Извините, не поняла вас, повторите, пожалуйста еще раз.")
+        await message.answer("Извините, не поняла вас, повторите, пожалуйста еще раз.", parse_mode='markdown')
 
 
-executor.start_polling(dp, skip_updates=True)
+executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
