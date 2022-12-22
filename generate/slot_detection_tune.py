@@ -1,20 +1,21 @@
 import tune_the_model as ttm
 import os
 
-ttm.set_api_key(
-    os.getenv('API_KEY')
-)
-
-
 IDS = {
     "base_model": "3wp7he0qx1577o8jsowqb00k1gcrmo3l",  # стандартная обученная модель
     "ru_model": "c704c84bbd19086594a629fb224e8c76",  # модель доученная на датасете из 16k сообщений
 }
 
-base_slot = ttm.TuneTheModel.from_id(IDS["ru_model"])
+
+def run():
+    global base_slot
+    ttm.set_api_key(
+        os.getenv('API_KEY')
+    )
+    base_slot = ttm.TuneTheModel.from_id(IDS["base_model"])
 
 
-def message_to_tag(text: str) -> dict:
+async def message_to_tag(text: str) -> dict:
     """
     :param text: message to tagging
     :return: dictionary tag -> tag content
