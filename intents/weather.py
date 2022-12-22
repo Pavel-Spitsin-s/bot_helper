@@ -21,10 +21,10 @@ def make_response(text, markdown=False, photo_url=None):
     }
 
 
-async def weather_handler(message: types.Message, user):
-    doc = text2doc(message.text)
+async def weather_handler(text, user):
+    doc = text2doc(text)
     loc = get_loc_from_doc(doc)
-    diff = get_date_diff_from_message(message.text)
+    diff = get_date_diff_from_message(text)
 
     if loc is None:
         if user.lat is not None and user.long is not None:
