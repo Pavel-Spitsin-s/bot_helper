@@ -12,36 +12,24 @@ from api.weather import get_weather
 
 from utils.utils import get_loc_from_doc, text2doc, get_date_diff_from_message
 
-load_dotenv()
 
-bot = Bot(token=os.getenv('BOT_TOKEN'))
-dp = Dispatcher(bot)
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.INFO,
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-
-
-@dp.message_handler()
-async def message_handler(message: types.Message):
-    if 'погода' not in message.text.lower():
-        return
-
+async def weather_handler(message: types.Message, user):
     doc = text2doc(message.text)
     loc = get_loc_from_doc(doc)
     diff = get_date_diff_from_message(message.text)
 
     if loc is None:
-        await message.answer('Я не нашёл локацию, извините.')
-        return
+        if user.lat is not None and user.long is not None:
+            loc = f'{user.lat},{user.long}'
+        else:
+            await message.answer('Я не нашёл локацию, извините.')
+            return
 
     if diff < 0:
         await message.answer('Я нашёл дату, которая выходит за диапазон возможных.')
         return
 
     toponym = await get_toponym(loc)
-    # await message.answer("```" + json.dumps(res, indent=4, ensure_ascii=False) + "```", parse_mode='markdown')
 
     if toponym is not None:
         weather = (await get_weather(*get_toponym_coords(toponym), diff))[diff - 1]
@@ -59,6 +47,3 @@ async def message_handler(message: types.Message):
         )
     else:
         await message.answer('Я не понял Ваc, извините.')
-
-
-executor.start_polling(dp, skip_updates=True)
