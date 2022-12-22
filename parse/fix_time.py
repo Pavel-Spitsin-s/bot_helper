@@ -213,7 +213,6 @@ def get(message_text, cur_date):
     if hour_changed and not minute_changed:
         _minute = 0
     time = datetime.time(hour=_hour, minute=_minute)
-
     return time
 
 

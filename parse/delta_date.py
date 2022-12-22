@@ -57,7 +57,6 @@ def get(message_text, cur_date):
                 date += delta
                 if len(nums) > 0:
                     del nums[-1]
-
     return date
 
 
@@ -67,5 +66,4 @@ def delta_date(message_text, cur_date):
     try:
         return get(message_text, cur_date)
     except (ValueError, IndexError, RuntimeError, KeyError, AttributeError):
-        print("error")
         return None
