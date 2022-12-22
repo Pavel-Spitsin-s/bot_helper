@@ -4,8 +4,8 @@ from aiogram.utils import executor
 from aiogram.dispatcher import Dispatcher
 import soundfile as sf
 import librosa
-from SpeechToText import speech_to_text, rate
-from TextToSpeech import text_to_speech
+from speech2text import speech_to_text, rate
+from text2speech import text_to_speech
 from classifier import classify
 from using_db import *
 from update_reminders import update_reminders

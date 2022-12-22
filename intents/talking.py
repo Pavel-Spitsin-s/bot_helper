@@ -8,7 +8,7 @@ model = AutoModelWithLMHead.from_pretrained('tinkoff-ai/ruDialoGPT-small')
 
 def get_next_sequence(msg, user):
     # last = db_sess.query(Message).filter(Message.user_id == user.id and Message.intent == 'болталка').all()[-1:]
-    text = 'ВТОРОЙ - это культурный и воспитательный  чат-бот '
+    text = ''
     # for i in last:
     #     text += f'@@ПЕРВЫЙ@@ {i.text} @@ВТОРОЙ@@ {i.answer} '
     text += f'@@ПЕРВЫЙ@@ {msg} @@ВТОРОЙ@@ '

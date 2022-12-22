@@ -24,3 +24,5 @@ nest_asyncio
 pymorphy2
 ru_word2number
 sqlalchemy
+sqlalchemy-serializer
+
