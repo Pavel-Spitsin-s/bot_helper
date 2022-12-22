@@ -6,11 +6,11 @@ tokenizer = AutoTokenizer.from_pretrained('tinkoff-ai/ruDialoGPT-small')
 model = AutoModelWithLMHead.from_pretrained('tinkoff-ai/ruDialoGPT-small')
 
 
-def get_next_sequence(msg, user):
-    # last = db_sess.query(Message).filter(Message.user_id == user.id and Message.intent == 'болталка').all()[-1:]
+async def get_next_sequence(msg, user, depth):
+    last = db_sess.query(Message).filter(Message.user_id == user.id and Message.intent == 'болталка').all()[-1:]
     text = ''
-    # for i in last:
-    #     text += f'@@ПЕРВЫЙ@@ {i.text} @@ВТОРОЙ@@ {i.answer} '
+    for i in last:
+        text += f'@@ПЕРВЫЙ@@ {i.text} @@ВТОРОЙ@@ {i.answer} '
     text += f'@@ПЕРВЫЙ@@ {msg} @@ВТОРОЙ@@ '
     print(text)
     inputs = tokenizer(text, return_tensors='pt')
@@ -19,7 +19,7 @@ def get_next_sequence(msg, user):
         top_k=10,
         top_p=0.95,
         num_beams=3,
-        num_return_sequences=3,
+        num_return_sequences=1,
         do_sample=True,
         no_repeat_ngram_size=2,
         temperature=1.2,
@@ -32,11 +32,19 @@ def get_next_sequence(msg, user):
     print(s)
 
     res = []
-    for i in s.split('@@ПЕРВЫЙ@@'):
-        for j in i.split('@@ВТОРОЙ@@'):
-            res.append(j)
+    for seq in s.split('@@ПЕРВЫЙ@@'):
+        for segm in seq.split('@@ВТОРОЙ@@'):
+            res.append(segm)
     # print(res)
     for i in range(len(res) - 2, -1, -1):
         if res[i] == f' {msg} ':
-            return res[i + 1]
+            ln = len(res[i + 1])
+            cnt_let = 0
+            CHARACTERS = '.,)(:;"[]- '
+            for char in res[i + 1]:
+                if char.isalpha() or char in CHARACTERS:
+                    cnt_let += 1
+            if cnt_let / ln > 0.6 or depth > 5:
+                return res[i + 1]
+            return await get_next_sequence(msg, user, depth + 1)
 

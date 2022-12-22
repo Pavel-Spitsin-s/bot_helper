@@ -34,7 +34,7 @@ async def download_file(message: types.Message):
 async def text_message(message: types.Message):
     text = message.text.lower()
     if text:
-        res = classify(text, add_user(message))
+        res = await classify(text, add_user(message))
         add_to_data(message, res[1], res[0])
         await message.answer(res[1])
 
@@ -48,7 +48,7 @@ async def voice_message(message: types.Message):
     text = await speech_to_text(message)
     message.text = text
     if text:
-        res = classify(text, add_user(message))
+        res = await classify(text, add_user(message))
         add_to_data(message, res[1], res[0])
         if len(res[1]) < 1000:
             await message.answer_voice(open(text_to_speech(res[1]), 'rb'), res[1])

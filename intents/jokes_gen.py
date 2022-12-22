@@ -6,7 +6,7 @@ from sqlalchemy.sql.expression import func
 joke_list = []
 
 
-def get_joke():
+async def get_joke():
     global joke_list
     if not joke_list:
         max_id = db_sess.query(func.max(Joke.id)).scalar()

@@ -3,7 +3,7 @@ from random import randint
 from sqlalchemy.sql.expression import func
 
 
-def select_series():
+async def select_series():
     rand_id = randint(0, db_sess.query(func.max(Series.id)).scalar())
     req = db_sess.query(Series).filter(Series.id == rand_id).first()
     genres_text = ', '.join([i.genre for i in req.genres])
