@@ -104,5 +104,4 @@ def delta(message_text, cur_date):
     try:
         return get(message_text, cur_date)
     except (ValueError, IndexError, RuntimeError, KeyError, AttributeError):
-        print("error")
         return None

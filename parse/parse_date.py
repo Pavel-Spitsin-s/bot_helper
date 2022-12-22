@@ -8,8 +8,10 @@ from parse.delta_date import delta_date
 from parse.delta_time import delta_time
 
 
-def get(text, date, time, cur_date):
+def get(text, dct, cur_date):
     try:
+        date = dct["date"]
+        time = dct["time"]
         ans = None
         if "через" in date:
             ans = cur_date + delta_date(date, cur_date)
@@ -26,9 +28,7 @@ def get(text, date, time, cur_date):
             ans += datetime.timedelta(hours=tm.hour)
             ans += datetime.timedelta(minutes=tm.minute)
             ans += datetime.timedelta(seconds=tm.second)
-            if ans.hour < 12 and ans < cur_date < ans + datetime.timedelta(hours=12):
-                ans += datetime.timedelta(hours=12)
-        return ans
+        return [ans, dct["event_name"]]
     except:
         # чистка от лишних запятых и ненужных слов
         text = text.lower().replace(',', '')

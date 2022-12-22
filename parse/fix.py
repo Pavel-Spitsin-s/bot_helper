@@ -71,7 +71,7 @@ def get(message_text, cur_date):
     extra_days = 0
     skip = 0
     _year, _month, _day, _hour, _minute = cur_date.year, cur_date.month, cur_date.day, cur_date.hour, cur_date.minute
-    hour_changed, minute_changed, weekday_changed = False, False, False
+    hour_changed, minute_changed, weekday_changed, morning, evening = False, False, False, False, False
     for i in range(len(message_text)):
         if skip > 0:
             skip -= 1
@@ -108,19 +108,19 @@ def get(message_text, cur_date):
                     continue
 
             # если получилось время меньше, то переводим в вечернее время
-            minute, hour = 30, hour - 1
-            if _minute + _hour * 60 > minute + hour * 60 and extra_days == 0:
-                hour += 12
-            _minute, _hour = 30, hour
+            _minute, _hour = 30, hour - 1
             skip = 1
             date_ids.extend([i, i + 1])
 
             # если есть прямое указание на часть дня
-            if i + 2 < len(message_text) and message_text[i + 2] in ["дня", "вечера"]:
-                skip += 1
-                if _hour < 12:
-                    _hour += 12
+            if i + 2 < len(message_text):
                 date_ids.append(i + 2)
+                if message_text[i + 2] in ["утра", "дня", "вечера"]:
+                    skip += 1
+                    if message_text[i + 2] == "утра":
+                        morning = True
+                    else:
+                        evening = True
             continue
 
         # если время задано в формате: без ... [минут] ... [утра / дня / вечера]
@@ -141,10 +141,7 @@ def get(message_text, cur_date):
             else:
                 hour = w2n.word_to_num(message_text[j])
             skip += 1
-            minute, hour = 60 - minute, hour - 1
-            if _minute + _hour * 60 > minute + hour * 60 and extra_days == 0:
-                hour += 12
-            _minute, _hour = minute, hour
+            _minute, _hour = 60 - minute, hour - 1
             date_ids.append(j)
             if j + 1 < len(message_text) and "час" in message_text[j + 1]:
                 j += 1
@@ -153,10 +150,10 @@ def get(message_text, cur_date):
             if j + 1 < len(message_text) and message_text[j + 1] in ["утра", "дня", "вечера"]:
                 j += 1
                 date_ids.append(j)
-                if message_text[j] in ["дня", "вечера"] and _hour < 12:
-                    _hour += 12
-                if message_text[j] == "утра" and _hour > 12:
-                    _hour -= 12
+                if message_text[j] in ["дня", "вечера"]:
+                    evening = True
+                if message_text[j] == "утра":
+                    morning = True
                 skip += 1
             continue
 
@@ -260,13 +257,17 @@ def get(message_text, cur_date):
                 date_ids.append(i)
                 continue
             if normal == "час":
+                date_ids.append(i)
                 _hour = nums[-1]
                 del nums[-1]
-                if i + 1 < len(message_text) and message_text[i + 1] in ["дня", "вечера"]:
-                    skip = 1
-                    if _hour < 12:
-                        _hour += 12
-                date_ids.extend([i, i + 1])
+                if i + 1 < len(message_text):
+                    if message_text[i + 1] in ["утра", "дня", "вечера"]:
+                        date_ids.append(i + 1)
+                        skip = 1
+                        if message_text[i + 1] != "утра":
+                            evening = True
+                        else:
+                            morning = True
                 hour_changed = True
                 continue
             if normal == "минута":
