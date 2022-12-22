@@ -1,4 +1,5 @@
 import tune_the_model as ttm
+import os
 
 ttm.set_api_key(
     os.getenv('API_KEY')
