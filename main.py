@@ -1,4 +1,4 @@
-from aiogram import Bot, types
+from aiogram import Bot
 from aiogram.types import ContentType
 from aiogram.utils import executor
 from aiogram.dispatcher import Dispatcher
@@ -8,6 +8,7 @@ from speech2text import speech_to_text, rate
 from text2speech import text_to_speech
 from classifier import classify
 from using_db import *
+from dotenv import load_dotenv
 import os
 import tune_the_model as ttm
 import asyncio
@@ -18,8 +19,8 @@ from update_reminders import update_reminders
 talking.run()
 slot_detection_tune.run()
 
-BOT_TOKEN = os.getenv('BOT_TOKEN')
-bot = Bot(token=BOT_TOKEN)
+load_dotenv()
+bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher(bot)
 
 
@@ -62,6 +63,19 @@ async def voice_message(message: types.Message):
             await message.answer(res[1])
     else:
         await message.answer("Извините, не поняла вас, повторите, пожалуйста еще раз.", parse_mode='markdown')
+
+
+@dp.message_handler(content_types=['location'])
+async def location_handler(message: types.Message):
+    user = add_user(message)
+    user.lat = message.location.latitude
+    user.long = message.location.longitude
+    db_sess.commit()
+
+    await message.answer(
+        'Ваша геолокация сохранена и '
+        'теперь будет использоваться для получения погоды.'
+    )
 
 
 executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
