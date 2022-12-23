@@ -63,6 +63,14 @@ async def ans_to_continue_joke(message: types.Message):
     slot_detection_tune.init()
 
 
+async def return_currencies(message, res):
+    add_to_data(message, res[1]['text'], res[0])
+    if res[1]['photo'] is not None:
+        await message.answer_photo(res[1]['photo'], res[1]['text'])
+    else:
+        await message.answer(res[1]['text'])
+
+
 @dp.message_handler(content_types=[ContentType.TEXT])
 async def text_message(message: types.Message):
     text = message.text.lower()
@@ -70,6 +78,8 @@ async def text_message(message: types.Message):
         res = await classify(text, add_user(message))
         if res[0] == 'погода':
             await return_weather(message, res)
+        elif res[0] == 'валюты':
+            await return_currencies(message, res)
         else:
             add_to_data(message, res[1], res[0])
             await message.answer(res[1])

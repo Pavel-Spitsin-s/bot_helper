@@ -1,3 +1,4 @@
+from intents.currencies import currencies_handler
 from intents.jokes_gen import get_joke
 from intents.select_film import select_film
 from intents.select_series import select_series
@@ -20,7 +21,7 @@ async def classify(text, user):
     elif (any(w in tags.keys() for w in ('news', 'last_news'))) or ('новост' in text):
         return ['новость', await last_news()]
     elif 'currency' in tags.keys() or 'currency_name' in tags.keys():
-        pass
+        return ['валюты', await currencies_handler(text)]
     elif ('reminder' in tags.keys()) or any(w in text for w in ['напомн', 'напомин']):
         return ['напоминание', await add_reminder(text, tags, user)]
     elif 'weather_descriptor' in tags.keys() or 'погода' in text:
