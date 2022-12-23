@@ -18,25 +18,74 @@ def make_response(text, photo=None):
 
 
 async def currencies_handler(text):
-    if 'валют' in text.lower():
+    if 'валют' in text.lower() or 'валюты' in text.lower():
         b = val(datetime.date.today())
         c = valuta(b)
         return make_response(
             c[2] + '\n' + c[9] + '\n' + c[10] + '\n' + c[32] + '\n' + c[33]
         )
     else:
-        if text in m:
-            s = text
-            b = val(datetime.date.today())
-            c = valuta(b)
-            graphic(s)
-            return make_response(
-                c[q[s]],
-                photo=open('graphic-tmp.png', 'rb')
-            )
+        text = text.split()
+        for i in range(len(text)):
+            morph = pymorphy2.MorphAnalyzer()
+            word = morph.parse(text[i].lower())[0]
+            if word.inflect({'nomn'}).word == "доллар" or word.inflect({'nomn'}).word == "доллары":
+                s = "доллар сша"
+                b = val(datetime.date.today())
+                c = valuta(b)
+                graphic(s)
+                return make_response(
+                    c[q[s]],
+                    photo=open('graphic-tmp.png', 'rb')
+                )
+            elif word.inflect({'nomn'}).word == "фунт" or word.inflect({'nomn'}).word == "фунты":
+                s = "фунт стерлингов соединенного королевства"
+                b = val(datetime.date.today())
+                c = valuta(b)
+                graphic(s)
+                return make_response(
+                    c[q[s]],
+                    photo=open('graphic-tmp.png', 'rb')
+                )
+            elif word.inflect({'nomn'}).word == "евро" or word.inflect({'nomn'}).word == "евро":
+                s = "евро"
+                b = val(datetime.date.today())
+                c = valuta(b)
+                graphic(s)
+                return make_response(
+                    c[q[s]],
+                    photo=open('graphic-tmp.png', 'rb')
+                )
+            elif word.inflect({'nomn'}).word == "вон" or word.inflect({'nomn'}).word == "воны":
+                s = "вон республики корея"
+                b = val(datetime.date.today())
+                c = valuta(b)
+                graphic(s)
+                return make_response(
+                    c[q[s]],
+                    photo=open('graphic-tmp.png', 'rb')
+                )
+            elif word.inflect({'nomn'}).word == "иен" or word.inflect({'nomn'}).word == "иены":
+                s = "японские иены"
+                b = val(datetime.date.today())
+                c = valuta(b)
+                graphic(s)
+                return make_response(
+                    c[q[s]],
+                    photo=open('graphic-tmp.png', 'rb')
+                )
+            elif word.inflect({'nomn'}).word == "тенге" or word.inflect({'nomn'}).word == "тенге":
+                s = "казахстанские тенге"
+                b = val(datetime.date.today())
+                c = valuta(b)
+                graphic(s)
+                return make_response(
+                    c[q[s]],
+                    photo=open('graphic-tmp.png', 'rb')
+                )
         else:
             return make_response(
-                "Не бачаю"
+                "не понимаю"
             )
 
 
