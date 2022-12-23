@@ -1,4 +1,3 @@
-from intents.currencies import currencies_handler
 from intents.jokes_gen import get_joke
 from intents.select_film import select_film
 from intents.select_series import select_series

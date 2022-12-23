@@ -1,3 +1,5 @@
+import time
+
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from using_db import *
@@ -5,7 +7,7 @@ import re
 
 
 def init():
-    global tokenizer, model
+    global tokenizer, model, generated_token_ids
     tokenizer = AutoTokenizer.from_pretrained('tinkoff-ai/ruDialoGPT-small')
     model = AutoModelForCausalLM.from_pretrained('tinkoff-ai/ruDialoGPT-small')
 
@@ -15,13 +17,12 @@ async def get_next_sequence(msg, user, depth, last=None):
         last = db_sess.query(Message) \
                .filter(Message.user_id == user.id) \
                .filter(Message.intent == 'болталка').all()[-3:]
-
     text = 'ВТОРОЙ девушка по имени Оля '
     for i in last:
         text += f'@@ПЕРВЫЙ@@ {i.text} @@ВТОРОЙ@@ {i.answer} '
     text += f'@@ПЕРВЫЙ@@ {msg} @@ВТОРОЙ@@ '
-
     inputs = tokenizer(text, return_tensors='pt')
+    tm = time.time()
     generated_token_ids = model.generate(
         **inputs,
         top_k=10,
@@ -32,10 +33,10 @@ async def get_next_sequence(msg, user, depth, last=None):
         no_repeat_ngram_size=2,
         temperature=1.2,
         repetition_penalty=1.2,
-        length_penalty=1.0,
         eos_token_id=50257,
         max_new_tokens=40
     )
+    print(time.time() - tm)
     s = [tokenizer.decode(sample_token_ids) for sample_token_ids in generated_token_ids][0]
 
     res = re.split(r'@@ПЕРВЫЙ@@|@@ВТОРОЙ@@', s)

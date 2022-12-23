@@ -11,6 +11,7 @@ def init():
     ttm.set_api_key(os.getenv('JOKE_API_KEY'))
     model = ttm.TuneTheModel.from_id(IDS["small"])
 
+
 def continue_joke(prefix: str) -> str:
     """
     :param prefix: first part of joke
