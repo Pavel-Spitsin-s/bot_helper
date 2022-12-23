@@ -63,6 +63,22 @@ async def ans_to_continue_joke(message: types.Message):
     slot_detection_tune.init()
 
 
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
+    st_text = "Привет, я бот персональный помощник - Уэнсдэй.\n\n" \
+              "Я могу:\n" \
+              "1. Подсказать, какая погода в определенном месте.\n" \
+              "2. Помочь с выбором сериала или фильма на вечер.\n" \
+              "3) Рассказать последнюю новость с сайта РИА\n" \
+              "4) Рассказать анекдот.\n" \
+              "5) Продолжить ваш анекдот. Может быть не смешно, но я старалась, честно! " \
+              "Для того, чтобы воспользоваться этой функцией нужно написать /cj *начало шутки*.\n" \
+              "6) Вы можете попросить меня напомнить вам что-то и я сделаю это. :)\n" \
+              "7) Мы можем пообщаться про машинное обучение, котиков и жизнь в Сириусе =)"
+
+    await message.answer_voice(open('audio/start.wav', 'rb'), st_text)
+
+
 async def return_currencies(message, res):
     add_to_data(message, res[1]['text'], res[0])
     if res[1]['photo'] is not None:
