@@ -91,6 +91,7 @@ def graphic(n):
     ax1.plot(x, y, color="red")
     plt.savefig('graphic-tmp.png', dpi=300)
     '''word1.inflect({'gent'}).word+" "+word2.inflect({'gent'}).word'''
+    #that
 
 
 def valuta(p):
