@@ -22,7 +22,7 @@ load_dotenv()
 
 generate.init()
 talking.init()
-slot_detection_tune.init()
+slot_detection_tune.run()
 
 bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher(bot)
