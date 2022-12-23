@@ -22,7 +22,7 @@ load_dotenv()
 
 generate.init()
 talking.init()
-slot_detection_tune.run()
+slot_detection_tune.init()
 
 bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher(bot)
@@ -55,7 +55,7 @@ async def return_weather(message: types.Message, res):
         await message.answer(res[1]['text'], parse_mode=parse_mode)
 
 
-@dp.message_handler(commands=['continue_joke'])
+@dp.message_handler(commands=['cj'])
 async def ans_to_continue_joke(message: types.Message):
     generate.init()
     text = ' '.join(message.text.split(' ')[1:])
@@ -75,6 +75,9 @@ async def return_currencies(message, res):
 async def text_message(message: types.Message):
     text = message.text.lower()
     if text:
+        if text[0] == '/':
+            await message.answer("Извините, но я не знаю такую команду.")
+            return
         res = await classify(text, add_user(message))
         if res[0] == 'погода':
             await return_weather(message, res)

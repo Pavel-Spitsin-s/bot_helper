@@ -20,9 +20,9 @@ def message_to_tag(text: str) -> dict:
     :param text: message to tagging
     :return: dictionary tag -> tag content
     """
-    response = base_slot.generate(text, num_hypos=3)
+    response = base_slot.generate(text, num_hypos=10)
     cnt = []
-    for i in range(3):
+    for i in range(10):
         d = dict()
         open_brackets = []
         close_brackets = []
@@ -63,3 +63,4 @@ def message_to_tag(text: str) -> dict:
     for i in range(3):
         if set(list(cnt[i].keys())) == tags:
             return cnt[i]
+    return {"text": text, "tagged_text": text}

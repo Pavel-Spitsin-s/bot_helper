@@ -5,12 +5,13 @@ from intents.last_news import last_news
 from intents.talking import get_next_sequence
 from intents.add_reminder import add_reminder
 from intents.weather import weather_handler
+from intents.currencies import currencies_handler
 from generate.slot_detection_tune import message_to_tag
 
 
 async def classify(text, user):
-    tags = message_to_tag(text)
-    print(tags)
+    tags = {}
+
     if ('anek' in tags.keys()) or ('анек' in text):
         return ['анекдот', await get_joke()]
     elif ('film' in tags.keys()) or ('фильм' in text):
@@ -19,7 +20,7 @@ async def classify(text, user):
         return ['сериал', await select_series()]
     elif (any(w in tags.keys() for w in ('news', 'last_news'))) or ('новост' in text):
         return ['новость', await last_news()]
-    elif 'currency' in tags.keys() or 'currency_name' in tags.keys():
+    elif any(w in tags.keys() for w in ['currency', 'currency_name']) or 'курс' in text:
         return ['валюты', await currencies_handler(text)]
     elif ('reminder' in tags.keys()) or any(w in text for w in ['напомн', 'напомин']):
         return ['напоминание', await add_reminder(text, tags, user)]
