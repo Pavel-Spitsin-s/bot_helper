@@ -315,20 +315,19 @@ def get(message_text, cur_date):
                 date_ids.append(i)
 
     # если остались числа - это может быть год-час-минута / час-минута-год
-    if len(nums) > 0:
-        if nums[-1] > 2000:
-            _year = nums[-1]
-        else:
-            _minute = nums[-1]
-            minute_changed = True
-        del nums[-1]
-    if len(nums) > 0:
-        if nums[-1] > 2000:
-            _year = nums[-1]
-        else:
-            _hour = nums[-1]
-            hour_changed = True
-        del nums[-1]
+    for i in range(len(nums)):
+        if nums[i] > 2000:
+            _year = nums[i]
+            del nums[i]
+            break
+    if len(nums) == 1:
+        _hour = nums[0]
+        hour_changed = True
+    else:
+        _minute = nums[1]
+        _hour = nums[0]
+        minute_changed = True
+        hour_changed = True
 
     # если меняли час - (полдень / полночь), а минуты нет
     if hour_changed and not minute_changed:

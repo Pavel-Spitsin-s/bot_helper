@@ -1,8 +1,4 @@
 import datetime
-import random
-import aiogram
-import dateutils
-import dateutil.parser as dparser
 from aiogram import Bot, types
 from aiogram.utils import executor
 from aiogram.dispatcher import Dispatcher
@@ -13,23 +9,30 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pymorphy2
 
-BOT_TOKEN = ''
 
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher(bot)
+def make_response(text, photo=None):
+    return {
+        'text': text,
+        'photo': photo
+    }
 
-@dp.message_handler()
-async def message_handler(message: types.Message):
-    if 'валют' in message.text.lower():
+
+async def currencies_handler(text):
+    if 'валют' in text.lower():
         b = val(datetime.date.today())
         c = valuta(b)
-        await message.answer(c[2]+'\n'+c[9]+'\n'+c[10]+'\n'+c[32]+'\n'+c[33])
+        return make_response(
+            c[2] + '\n' + c[9] + '\n' + c[10] + '\n' + c[32] + '\n' + c[33]
+        )
     else:
-        s = message.text
+        s = text
         b = val(datetime.date.today())
         c = valuta(b)
         graphic(s)
-        await message.answer_photo(open('/project/graphic.png', 'rb'), c[q[s]])
+        return make_response(
+            c[q[s]],
+            photo=open('graphic-tmp.png')
+        )
 
 
 m = ('Австралийский доллар', 'Азербайджанский манат', 'Фунт стерлингов Соединенного королевства',
@@ -53,8 +56,6 @@ q = {'Австралийский доллар': 0, 'Азербайджански
      'Южноафриканские рэнды': 31, 'Вон Республики Корея': 32, 'Японские иены': 33}
 
 
-
-
 def graphic(n):
     a = []
     c = []
@@ -71,26 +72,26 @@ def graphic(n):
     '''morph = pymorphy2.MorphAnalyzer()
     if n!='Евро':
         n = n.split()
-        word1 = morph.parse(n[0])[0]
+        word1 = morph.parse(n[0])[0]1
         word2 = morph.parse(n[1])[0]'''
-    save_results_to = '/project/'
     x = np.arange(32)
     y = np.array(a[::-1])
     fig = plt.figure()
     ax1 = fig.add_subplot(111)
     ax1.set_xticklabels(['00.00'] + c[::5])
-    plt.title("Курс изменения "+"за месяц")
+    plt.title("Курс изменения " + "за месяц")
     ax1.plot(x, y, color="red")
-    plt.savefig(save_results_to+'graphic.png', dpi=300)
+    plt.savefig('graphic-tmp.png', dpi=300)
     '''word1.inflect({'gent'}).word+" "+word2.inflect({'gent'}).word'''
 
 
 def valuta(p):
     a = []
     for i in range(len(p)):
-        d = p[i]['Nominal'] + ' ' + p[i]['Name'] + ': ' + p[i]['Value']+' руб'
+        d = p[i]['Nominal'] + ' ' + p[i]['Name'] + ': ' + p[i]['Value'] + ' руб'
         a.append(d)
     return a
+
 
 def val(date):
     url = "https://www.cbr.ru/scripts/XML_daily.asp"
@@ -99,9 +100,3 @@ def val(date):
     p = xmltodict.parse(res.text)
     return p['ValCurs']['Valute']
 
-
-# graphic('Доллар США')
-executor.start_polling(
-    dp,
-    skip_updates=True,
-)

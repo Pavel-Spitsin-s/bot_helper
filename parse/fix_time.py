@@ -195,10 +195,14 @@ def get(message_text, cur_date):
                 else:
                     morning = True
                 continue
-    # если остались числа - это час-минута
+    # если остались числа - это час-минута / час
     if len(nums) > 0:
-        _minute = nums[-1]
-        minute_changed = True
+        if len(nums) == 2:
+            _minute = nums[-1]
+            minute_changed = True
+        else:
+            _hour = nums[-1]
+            hour_changed = True
         del nums[-1]
     if len(nums) > 0:
         _hour = nums[-1]

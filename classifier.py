@@ -20,8 +20,8 @@ async def classify(text, user):
     elif (any(w in tags.keys() for w in ('news', 'last_news'))) or ('новост' in text):
         return ['новость', await last_news()]
     elif 'currency' in tags.keys() or 'currency_name' in tags.keys():
-        pass
-    elif ('reminder' in tags.keys()) and any(w in text for w in ['напомн', 'напомин']):
+        return ['валюты', await currencies_handler(text)]
+    elif ('reminder' in tags.keys()) or any(w in text for w in ['напомн', 'напомин']):
         return ['напоминание', await add_reminder(text, tags, user)]
     elif 'weather_descriptor' in tags.keys() or 'погода' in text:
         return ['погода', await weather_handler(text, user)]

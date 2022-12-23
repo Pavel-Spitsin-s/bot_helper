@@ -29,6 +29,8 @@ dateparser
 ru_word2number
 sqlalchemy
 sqlalchemy_serializer
+
+xmltodict
+matplotlib
 omegaconf
 tune-the-model==0.1.31
-
