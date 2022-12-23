@@ -19,7 +19,7 @@ def add_user(message: types.Message):
 
 def add_to_data(message: types.Message, answer, intent):
     user = add_user(message)
-    ans = re.sub(r'[^a-zа-яё.,)(:;"\[\]\-\s]', '', answer, flags=re.UNICODE | re.IGNORECASE)
+    ans = re.sub(r'[^а-яё.,)(:;"\[\]\-\s]', '', answer, flags=re.UNICODE | re.IGNORECASE)
 
     msg = Message(text=message.text, datetime=message.date,
                   intent=intent, answer=ans, user=user)

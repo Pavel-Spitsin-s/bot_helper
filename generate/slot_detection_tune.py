@@ -1,17 +1,18 @@
 import tune_the_model as ttm
 import os
 
-ttm.set_api_key(
-    os.getenv('API_KEY')
-)
-
-
 IDS = {
     "base_model": "3wp7he0qx1577o8jsowqb00k1gcrmo3l",  # стандартная обученная модель
     "ru_model": "c704c84bbd19086594a629fb224e8c76",  # модель доученная на датасете из 16k сообщений
+    "DIY": "ba88d6204509da94ee7abb17f8b2b214",
+    "new_df": "7c0c0968998fc5c2711e9c269c03ded5",
 }
 
-base_slot = ttm.TuneTheModel.from_id(IDS["ru_model"])
+
+def init():
+    global base_slot
+    ttm.set_api_key(os.getenv('TTM_APIKEY1'))
+    base_slot = ttm.TuneTheModel.from_id(IDS["DIY"])
 
 
 def message_to_tag(text: str) -> dict:
@@ -30,7 +31,16 @@ def message_to_tag(text: str) -> dict:
         if string[i] == "]":
             close_brackets.append(i)
     for i in range(len(open_brackets)):
-        s = string[open_brackets[i] + 1:close_brackets[i]]
+        ind = 0
+        for j in range(len(close_brackets)):
+            if close_brackets[j] > open_brackets[i]:
+                ind = j
+                break
+        s = string[open_brackets[i] + 1:close_brackets[ind]]
+        if ":" not in s:
+            d["text"] = text
+            d["tagged_text"] = string
+            return d
         tag = s.split(":")[0].strip()
         content = s.split(":")[1].strip()
         d[tag] = content
