@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-from dotenv import load_dotenv
-from aiogram import Bot, types
-from aiogram.utils import executor
-from aiogram.dispatcher import Dispatcher
-
 import logging
 
 from api.geocoder import *
@@ -22,13 +17,14 @@ def make_response(text, markdown=False, photo_url=None):
 
 
 async def weather_handler(text, user):
+    text = text.title()
     doc = text2doc(text)
     loc = get_loc_from_doc(doc)
     diff = get_date_diff_from_message(text)
 
-    if loc is None:
+    if not loc:
         if user.lat is not None and user.long is not None:
-            loc = f'{user.lat},{user.long}'
+            loc = f'{user.long},{user.lat}'
         else:
             return make_response(
                 'Вы можете отправить мне Ваши координаты, чтобы запрашивать погоду в своём городе.'

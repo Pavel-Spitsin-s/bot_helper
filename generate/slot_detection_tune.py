@@ -4,6 +4,7 @@ import os
 IDS = {
     "base_model": "3wp7he0qx1577o8jsowqb00k1gcrmo3l",  # стандартная обученная модель
     "ru_model": "c704c84bbd19086594a629fb224e8c76",  # модель доученная на датасете из 16k сообщений
+    "DIY": "ba88d6204509da94ee7abb17f8b2b214",
 }
 
 
@@ -12,7 +13,7 @@ def run():
     ttm.set_api_key(
         os.getenv('API_KEY')
     )
-    base_slot = ttm.TuneTheModel.from_id(IDS["base_model"])
+    base_slot = ttm.TuneTheModel.from_id(IDS["DIY"])
 
 
 async def message_to_tag(text: str) -> dict:

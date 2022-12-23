@@ -1,3 +1,5 @@
+import logging
+
 from aiogram import Bot
 from aiogram.types import ContentType
 from aiogram.utils import executor
@@ -10,7 +12,6 @@ from classifier import classify
 from using_db import *
 from dotenv import load_dotenv
 import os
-import tune_the_model as ttm
 import asyncio
 from generate import slot_detection_tune
 from intents import talking
@@ -22,6 +23,11 @@ slot_detection_tune.run()
 load_dotenv()
 bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher(bot)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 
 async def on_startup(x):
@@ -37,16 +43,29 @@ async def download_file(message: types.Message):
     sf.write('audio/voice.wav', x, rate)
 
 
+async def return_weather(message: types.Message, res):
+    add_to_data(message, res[1]['text'], res[0])
+    parse_mode = 'markdown' if res[1]['markdown'] else None
+    if res[1]['photo_url']:
+        # todo Добавить загрузку и вывод фото
+        await message.answer_photo(res[1]['photo_url'], res[1]['text'], parse_mode=parse_mode)
+    else:
+        await message.answer(res[1]['text'], parse_mode=parse_mode)
+
+
 @dp.message_handler(content_types=[ContentType.TEXT])
 async def text_message(message: types.Message):
     text = message.text.lower()
     if text:
         res = await classify(text, add_user(message))
-        add_to_data(message, res[1], res[0])
-        await message.answer(res[1])
+        if res[0] == 'погода':
+            await return_weather(message, res)
+        else:
+            add_to_data(message, res[1], res[0])
+            await message.answer(res[1])
 
     else:
-        await message.answer("Извините, не поняла вас, повторите, пожалуйста, еще раз.", parse_mode='markdown')
+        await message.answer("Извините, не поняла вас, повторите, пожалуйста, еще раз.")
 
 
 @dp.message_handler(content_types=[ContentType.VOICE])
@@ -56,13 +75,16 @@ async def voice_message(message: types.Message):
     message.text = text
     if text:
         res = await classify(text, add_user(message))
-        add_to_data(message, res[1], res[0])
-        if len(res[1]) < 1000:
-            await message.answer_voice(open(text_to_speech(res[1]), 'rb'), res[1])
+        if res[0] == 'погода':
+            await return_weather(message, res)
         else:
-            await message.answer(res[1])
+            add_to_data(message, res[1], res[0])
+            if len(res[1]) < 1000:
+                await message.answer_voice(open(text_to_speech(res[1]), 'rb'), res[1])
+            else:
+                await message.answer(res[1])
     else:
-        await message.answer("Извините, не поняла вас, повторите, пожалуйста еще раз.", parse_mode='markdown')
+        await message.answer("Извините, не поняла вас, повторите, пожалуйста еще раз.")
 
 
 @dp.message_handler(content_types=['location'])
