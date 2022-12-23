@@ -17,11 +17,10 @@ from generate import slot_detection_tune
 from intents import talking
 from update_reminders import update_reminders
 
+load_dotenv()
 talking.run()
 slot_detection_tune.run()
 
-
-load_dotenv()
 bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher(bot)
 logging.basicConfig(
