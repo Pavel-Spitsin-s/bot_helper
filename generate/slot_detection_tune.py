@@ -20,9 +20,9 @@ def message_to_tag(text: str) -> dict:
     :param text: message to tagging
     :return: dictionary tag -> tag content
     """
-    response = base_slot.generate(text, num_hypos=10)
+    response = base_slot.generate(text, num_hypos=3)
     cnt = []
-    for i in range(10):
+    for i in range(3):
         d = dict()
         open_brackets = []
         close_brackets = []
