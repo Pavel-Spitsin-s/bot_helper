@@ -160,8 +160,9 @@ def get(message_text, cur_date):
         # если задано конкретное время
         if ":" in word:
             try:
-                _hour = int(word.split(':')[0])
-                _minute = int(word.split(':')[1])
+                word = word.split(":")
+                _hour = int(word[0])
+                _minute = int(word[1])
                 date_ids.append(i)
                 continue
             except (IndexError, ValueError):
@@ -323,7 +324,7 @@ def get(message_text, cur_date):
     if len(nums) == 1:
         _hour = nums[0]
         hour_changed = True
-    else:
+    elif len(nums) == 2:
         _minute = nums[1]
         _hour = nums[0]
         minute_changed = True
@@ -364,7 +365,7 @@ def get(message_text, cur_date):
 
 def fix(message_text, cur_date):
     # исправление ошибок вроде двадцать-тринадцать
-    message_text = message_text.replace("-", " ")
+    message_text = message_text.replace("-", " ").strip()
     try:
         return get(message_text, cur_date)
     except (ValueError, IndexError, RuntimeError, KeyError, AttributeError):
