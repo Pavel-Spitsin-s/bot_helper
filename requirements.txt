@@ -30,3 +30,5 @@ ru_word2number
 sqlalchemy
 sqlalchemy_serializer
 omegaconf
+tune-the-model==0.1.31
+
