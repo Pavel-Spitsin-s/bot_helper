@@ -10,9 +10,7 @@ IDS = {
 
 def run():
     global base_slot
-    ttm.set_api_key(
-        os.getenv('API_KEY')
-    )
+    ttm.set_api_key(os.getenv('TTM_APIKEY1'))
     base_slot = ttm.TuneTheModel.from_id(IDS["DIY"])
 
 
@@ -38,7 +36,7 @@ async def message_to_tag(text: str) -> dict:
                 ind = j
                 break
 
-        s = string[open_brackets[i] + 1:ind]
+        s = string[open_brackets[i] + 1:close_brackets[ind]]
         tag = s.split(":")[0].strip()
         content = s.split(":")[1].strip()
         d[tag] = content
