@@ -36,5 +36,10 @@ def get_toponym_rect(toponym):
     return x1, y1, x2, y2
 
 
+def get_toponym_spn(toponym):
+    rect = get_toponym_rect(toponym)
+    return (rect[2] - rect[0]) / 2, (rect[3] - rect[1]) / 2
+
+
 def get_toponym_name(toponym):
     return toponym['name']
