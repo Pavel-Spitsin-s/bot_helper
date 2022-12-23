@@ -32,7 +32,13 @@ async def message_to_tag(text: str) -> dict:
         if string[i] == "]":
             close_brackets.append(i)
     for i in range(len(open_brackets)):
-        s = string[open_brackets[i] + 1:close_brackets[i]]
+        ind = 0
+        for j in range(len(close_brackets)):
+            if close_brackets[j] > open_brackets[i]:
+                ind = j
+                break
+
+        s = string[open_brackets[i] + 1:ind]
         tag = s.split(":")[0].strip()
         content = s.split(":")[1].strip()
         d[tag] = content

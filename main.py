@@ -20,6 +20,7 @@ from update_reminders import update_reminders
 talking.run()
 slot_detection_tune.run()
 
+
 load_dotenv()
 bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher(bot)
