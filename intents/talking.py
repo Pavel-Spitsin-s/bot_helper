@@ -4,9 +4,13 @@ from using_db import *
 import re
 
 
-async def get_next_sequence(msg, user, depth, last=None):
+def init():
+    global tokenizer, model
     tokenizer = AutoTokenizer.from_pretrained('tinkoff-ai/ruDialoGPT-small')
     model = AutoModelForCausalLM.from_pretrained('tinkoff-ai/ruDialoGPT-small')
+
+
+async def get_next_sequence(msg, user, depth, last=None):
     if not last:
         last = db_sess.query(Message) \
                .filter(Message.user_id == user.id) \

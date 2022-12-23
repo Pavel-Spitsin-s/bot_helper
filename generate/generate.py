@@ -4,9 +4,12 @@ import os
 IDS = {
     "small": "b5458d0c18437bc84d936d49e702690e",  # модель обученная на датасете из 17k анекдотов хорошего качества
     "big": "349d8ee605329c2085df9646268415c5", }  # модель обученная на датасете из 150k анекдотов низкого качества
-ttm.set_api_key(os.getenv('API_KEY'))
-model = ttm.TuneTheModel.from_id(IDS["small"])
 
+
+def init():
+    global model
+    ttm.set_api_key(os.getenv('JOKE_API_KEY'))
+    model = ttm.TuneTheModel.from_id(IDS["small"])
 
 def continue_joke(prefix: str) -> str:
     """
@@ -18,6 +21,3 @@ def continue_joke(prefix: str) -> str:
     model_answer = model.generate(prefix)[0]
     joke = prefix + " " + model_answer
     return joke
-
-
-print(continue_joke("Мяу!"))
