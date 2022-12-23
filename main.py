@@ -63,7 +63,7 @@ async def ans_to_continue_joke(message: types.Message):
     slot_detection_tune.init()
 
 
-@dp.message_handler(commands=['start'])
+@dp.message_handler(commands=['start', 'help'])
 async def start(message: types.Message):
     st_text = "Привет, я бот персональный помощник - *Уэнсдэй*.\n\n" \
               "Я могу:\n" \
@@ -74,7 +74,10 @@ async def start(message: types.Message):
               "5) Продолжить ваш анекдот. Может быть не смешно, но я старалась, честно! " \
               "Для того, чтобы воспользоваться этой функцией нужно написать /cj *начало шутки*.\n" \
               "6) Вы можете попросить меня напомнить вам что-то и я сделаю это. :)\n" \
-              "7) Мы можем пообщаться про машинное обучение, котиков и жизнь в Сириусе =)"
+              "7) Мы можем пообщаться про машинное обучение, котиков и жизнь в Сириусе. =)\n\n" \
+              "" \
+              "Для того, чтобы не указывать город и узнавать погоду" \
+              " всегда в одном городе, пришлите мне вашу геопозицию."
 
     await message.answer_voice(open('audio/start.wav', 'rb'), st_text, parse_mode='markdown')
 
