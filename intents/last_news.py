@@ -8,7 +8,10 @@ async def last_news():
     async with aiohttp.ClientSession() as session:
         async with session.get(link) as res:
             soup = bs(await res.text(), 'html.parser')
-            url = soup.find('a', class_='cell-main-photo__link').get('href')
+            try:
+                url = soup.find('a', class_='cell-main-photo__link').get('href')
+            except Exception:
+                url = soup.find('a', class_='cell-video__info').get('href')
 
         async with session.get(url) as res:
             soup = bs(await res.text(), 'html.parser')
