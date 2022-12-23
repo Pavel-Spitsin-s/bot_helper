@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
-
 from api.geocoder import *
 from api.static_maps import get_toponym_map_url
 from api.weather import get_weather
@@ -44,7 +42,7 @@ async def weather_handler(text, user):
 
         date_str = weather['date'].strftime('%d.%m.%Y')
         return make_response(
-            f'*{weather["emoji"]} Погода в {get_toponym_name(toponym)} на {date_str}*\n'
+            f'*{weather["emoji"]} | Погода | {get_toponym_name(toponym)} | {date_str}*\n'
             f'*{weather["condition"].capitalize()}*\n'
             f'*Температура*: {weather["temperature"]} °C\n'
             f'*Атмосферное давление*: {weather["pressure"]} мм рт. ст.\n'
