@@ -29,3 +29,6 @@ dateparser
 ru_word2number
 sqlalchemy
 sqlalchemy_serializer
+
+xmltodict
+matplotlib
