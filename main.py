@@ -48,7 +48,6 @@ async def return_weather(message: types.Message, res):
     add_to_data(message, res[1]['text'], res[0])
     parse_mode = 'markdown' if res[1]['markdown'] else None
     if res[1]['photo_url']:
-        # todo Добавить загрузку и вывод фото
         await message.answer_photo(res[1]['photo_url'], res[1]['text'], parse_mode=parse_mode)
     else:
         await message.answer(res[1]['text'], parse_mode=parse_mode)
