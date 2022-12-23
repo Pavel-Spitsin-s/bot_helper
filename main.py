@@ -121,9 +121,9 @@ async def voice_message(message: types.Message):
             await return_weather(message, res)
         else:
             add_to_data(message, res[1], res[0])
-            if len(res[1]) < 1000:
+            try:
                 await message.answer_voice(open(text_to_speech(res[1]), 'rb'), res[1])
-            else:
+            except Exception:
                 await message.answer(res[1])
     else:
         await message.answer("Извините, не поняла вас, повторите, пожалуйста еще раз.")
