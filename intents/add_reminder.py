@@ -2,14 +2,19 @@ from sqlalchemy.orm import Session
 from parse.parse_date import get
 from data.models.reminder import Reminder
 import datetime
+from generate.slot_detection_tune import message_to_tag
 
 
-async def add_reminder(text, dct, user):
+async def add_reminder(text, user):
     db_sess = Session.object_session(user)
     cur_date = datetime.datetime.now()
 
     # пробуем обработать сообщение как напоминание с датой
-    response = get(text, dct, cur_date)
+    try:
+        dct = message_to_tag(text)
+        response = get(text, dct, cur_date)
+    except:
+        return "Прошу прощения, не совсем вас поняла, повторите, пожалуйста, ваше напоминание."
     if response is None:
         return "Прошу прощения, не совсем вас поняла, повторите, пожалуйста, ваше напоминание."
     date, action = response[0], response[1]
