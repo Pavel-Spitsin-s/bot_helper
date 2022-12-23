@@ -9,22 +9,21 @@ from generate.slot_detection_tune import message_to_tag
 
 
 async def classify(text, user):
-    # todo добавить ифы
-    tags = await message_to_tag(text)
+    tags = message_to_tag(text)
     print(tags)
-    if 'anek' in tags.keys():
+    if ('anek' in tags.keys()) or ('анек' in text):
         return ['анекдот', await get_joke()]
-    elif 'film' in tags.keys():
+    elif ('film' in tags.keys()) or ('фильм' in text):
         return ['фильм', await select_film()]
-    elif 'serial' in tags.keys():
+    elif ('serial' in tags.keys()) or ('сериал' in text):
         return ['сериал', await select_series()]
-    elif 'news' in tags.keys():
+    elif (any(w in tags.keys() for w in ('news', 'last_news'))) or ('новост' in text):
         return ['новость', await last_news()]
     elif 'currency' in tags.keys() or 'currency_name' in tags.keys():
         pass
-    elif 'reminder' in tags.keys():
+    elif ('reminder' in tags.keys()) or any(w in text for w in ['напомн', 'напомин']):
         return ['напоминание', await add_reminder(text, tags, user)]
-    elif 'weather_descriptor' in tags.keys():
+    elif 'weather_descriptor' in tags.keys() or 'погода' in text:
         return ['погода', await weather_handler(text, user)]
     else:
         return ['болталка', await get_next_sequence(text, user, 0)]
