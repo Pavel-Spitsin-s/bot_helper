@@ -14,13 +14,16 @@ from dotenv import load_dotenv
 import os
 import asyncio
 from generate import slot_detection_tune
-from intents import talking
 from update_reminders import update_reminders
-
-
-slot_detection_tune.run()
+from generate import generate
+from intents import talking
 
 load_dotenv()
+
+generate.init()
+talking.init()
+slot_detection_tune.init()
+
 bot = Bot(token=os.getenv('BOT_TOKEN'))
 dp = Dispatcher(bot)
 logging.basicConfig(
@@ -51,6 +54,14 @@ async def return_weather(message: types.Message, res):
         await message.answer_photo(res[1]['photo_url'], res[1]['text'], parse_mode=parse_mode)
     else:
         await message.answer(res[1]['text'], parse_mode=parse_mode)
+
+
+@dp.message_handler(commands=['continue_joke'])
+async def ans_to_continue_joke(message: types.Message):
+    generate.init()
+    text = ' '.join(message.text.split(' ')[1:])
+    await message.answer(generate.continue_joke(text))
+    slot_detection_tune.init()
 
 
 @dp.message_handler(content_types=[ContentType.TEXT])
