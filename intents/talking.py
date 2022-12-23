@@ -1,16 +1,12 @@
 import torch
-from transformers import AutoTokenizer, AutoModelWithLMHead
+from transformers import AutoTokenizer, AutoModelForCausalLM
 from using_db import *
 import re
 
 
-def run():
-    global tokenizer, model
-    tokenizer = AutoTokenizer.from_pretrained('tinkoff-ai/ruDialoGPT-small')
-    model = AutoModelWithLMHead.from_pretrained('tinkoff-ai/ruDialoGPT-small')
-
-
 async def get_next_sequence(msg, user, depth, last=None):
+    tokenizer = AutoTokenizer.from_pretrained('tinkoff-ai/ruDialoGPT-small')
+    model = AutoModelForCausalLM.from_pretrained('tinkoff-ai/ruDialoGPT-small')
     if not last:
         last = db_sess.query(Message) \
                .filter(Message.user_id == user.id) \

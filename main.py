@@ -17,9 +17,8 @@ from generate import slot_detection_tune
 from intents import talking
 from update_reminders import update_reminders
 
-talking.run()
-slot_detection_tune.run()
 
+slot_detection_tune.run()
 
 load_dotenv()
 bot = Bot(token=os.getenv('BOT_TOKEN'))
@@ -47,6 +46,7 @@ async def download_file(message: types.Message):
 async def return_weather(message: types.Message, res):
     add_to_data(message, res[1]['text'], res[0])
     parse_mode = 'markdown' if res[1]['markdown'] else None
+    logging.info(res[1]['photo_url'])
     if res[1]['photo_url']:
         await message.answer_photo(res[1]['photo_url'], res[1]['text'], parse_mode=parse_mode)
     else:

@@ -16,7 +16,7 @@ def run():
     base_slot = ttm.TuneTheModel.from_id(IDS["DIY"])
 
 
-async def message_to_tag(text: str) -> dict:
+def message_to_tag(text: str) -> dict:
     """
     :param text: message to tagging
     :return: dictionary tag -> tag content
@@ -37,8 +37,7 @@ async def message_to_tag(text: str) -> dict:
             if close_brackets[j] > open_brackets[i]:
                 ind = j
                 break
-
-        s = string[open_brackets[i] + 1:ind]
+        s = string[open_brackets[i] + 1:close_brackets[ind]]
         tag = s.split(":")[0].strip()
         content = s.split(":")[1].strip()
         d[tag] = content

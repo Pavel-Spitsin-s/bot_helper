@@ -9,7 +9,7 @@ from generate.slot_detection_tune import message_to_tag
 
 
 async def classify(text, user):
-    tags = await message_to_tag(text)
+    tags = message_to_tag(text)
     print(tags)
     if ('anek' in tags.keys()) or ('анек' in text):
         return ['анекдот', await get_joke()]
