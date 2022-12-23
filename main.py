@@ -65,7 +65,7 @@ async def ans_to_continue_joke(message: types.Message):
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    st_text = "Привет, я бот персональный помощник - Уэнсдэй.\n\n" \
+    st_text = "Привет, я бот персональный помощник - *Уэнсдэй*.\n\n" \
               "Я могу:\n" \
               "1. Подсказать, какая погода в определенном месте.\n" \
               "2. Помочь с выбором сериала или фильма на вечер.\n" \
@@ -76,7 +76,7 @@ async def start(message: types.Message):
               "6) Вы можете попросить меня напомнить вам что-то и я сделаю это. :)\n" \
               "7) Мы можем пообщаться про машинное обучение, котиков и жизнь в Сириусе =)"
 
-    await message.answer_voice(open('audio/start.wav', 'rb'), st_text)
+    await message.answer_voice(open('audio/start.wav', 'rb'), st_text, parse_mode='markdown')
 
 
 async def return_currencies(message, res):
