@@ -61,3 +61,5 @@ Project Organization
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
+
+Link to the presentation of the project defence as part of the educational shift "Algorithms and Data Analysis" at Sirius: https://sochisirius.ru/uploads/2023/01/iikt_1222_11.pdf
