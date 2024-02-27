@@ -10,6 +10,8 @@ A Telegram bot that will solve everyday tasks using text processing and ML. Seve
 # Processing
 ![Screenshot](https://github.com/Pavel-Spitsin-s/bot_helper/tree/main/data/not%20using%20data/sc.png)
 
+# Technologies
+![Screenshot](https://github.com/Pavel-Spitsin-s/bot_helper/blob/main/data/not%20using%20data/tech.png)
 
 Project Organization
 ------------
