@@ -8,7 +8,7 @@ Telegram bot that will always help in word and deed
 A Telegram bot that will solve everyday tasks using text processing and ML. Several skills have been implemented in the bot. The first one is reminders: the bot receives messages with requests "remind me to call my mum in 3 hours", selects entities <what to remind> and <when to remind> and sends a reminder at the right time. The second skill is chatter. The YaLM (Zeliboba) language model was applied to chat about a free topic in a funny style. A few choice skills were also made: weather, anecdote of the day, finding answers to informational questions ("How much does an elephant weigh?"). In addition, speech recognition and synthesis were applied so that the bot communicates not only by text, but also by voice.
 
 # Processing
-![Screnshot](https://github.com/Pavel-Spitsin-s/bot_helper/tree/main/data/not%20using%20data/sc.png)
+![Screenshot](https://github.com/Pavel-Spitsin-s/bot_helper/tree/main/data/not%20using%20data/sc.png)
 
 
 Project Organization
